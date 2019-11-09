@@ -44,13 +44,18 @@ if($_POST['submit'])
 
 function _Login($uno,$pwd)
 {
-	$query = "SELECT * FROM TB_USER WHERE UNO = '$uno' AND PWD = '$pwd'";
-	$result = $db->query($query)->fetchAll();
-	if(count($result) > 0){
-		$_SESSION['UNO'] = $_POST['account'];
-      	header("../index.html");
-	}else{
-		echo " 登入失敗 ";
+	try {	
+		$query = "SELECT * FROM TB_USER WHERE UNO = '$uno' AND PWD = '$pwd'";
+		$stid = _SQLOpen($GLOBALS['db'],$query);
+		$result = $stid->fetchAll();
+		if(count($result) > 0){
+			$_SESSION['UNO'] = $_POST['account'];
+	      	header("Location:index.php");
+		}else{
+			echo " 登入失敗 ";
+		}
+	} catch (PDOException $e) {
+	    echo $e->getMessage();
 	}
 }
 

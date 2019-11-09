@@ -4,51 +4,6 @@
     session_start();
   }
 
-  function _dbconnect(){
-  $db = "oci:dbname=(description=(address=(protocol=tcp)(host=140.117.69.58)(port=1521))(connect_data=(sid=ORCL)));charset=utf8";
-  $username = "Group17";
-  $password = "group171717";
-  try {
-      $conn = new PDO($db, $username, $password);
-  } catch (PDOException $e) {
-      echo $e->getMessage();
-  }
-    return $conn;
-  }
-
-  function _SQLOpen($dbcon,$query)
-  {
-    try {
-      $result = $dbcon->query($query);
-    } catch (PDOException $e){
-      $result = $e->getMessage();
-    }
-    return $result;
-  }
-
-  function _SQLExecu($dbcon,$query)
-  {
-    try {
-      $result = $dbcon->exec($query);
-    } catch (PDOException $e){
-      $result = $e->getMessage();
-    } 
-    echo $result;
-  }
-  global $db;
-  $db = _dbconnect();
-  function _Login($uno,$pwd)
-  {
-    $query = "SELECT * FROM TB_USER WHERE UNO = '$uno' AND PWD = '$pwd'";
-    $result = $db->query($query)->fetchAll();
-    if(count($result) > 0){
-      $_SESSION['UNO'] = $_POST['account'];
-          header("../index.html");
-    }else{
-      echo " 登入失敗 ";
-    }
-  }
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
