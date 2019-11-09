@@ -147,4 +147,55 @@ body {
   background-size: contain;
 }
 
+.signInLayout {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: url(../images/bg.jpeg) no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+
+.signInContent {
+  display: inline-block;
+}
+.signInContent .logo {
+  margin-bottom: 10px;
+  text-align: center;
+  font-size: 1.5em;
+}
+.signInContent .logo img {
+  width: 240px;
+}
+.signInContent .conter {
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 1px 3px #7b7b7b;
+  padding: 30px;
+}
+.signInContent .conter .input .item {
+  margin: 10px 0;
+}
+.signInContent .conter .input .item input {
+  line-height: 2;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+.signInContent .conter .tool {
+  text-align: center;
+  margin-top: 15px;
+}
+.signInContent .conter .tool input {
+  font-size: 1em;
+  margin-bottom: 15px;
+  padding: 3px 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+.signInContent .conter .tool .p {
+  color: #ccc;
+}
+
 /*# sourceMappingURL=style.css.map */
