@@ -74,7 +74,7 @@ function _GroupDelete($uno,$gno){
 function _ListSelect($uno,$gno){
 	$query = "SELECT * FROM TB_LIST WHERE UNO = '$uno' AND GNO = '$gno'";
 	$stid = _SQLOpen($GLOBALS['db'],$query);
-	return $stid
+	return $stid;
 }
 function _ListCreate($uno,$gno,$ltitle){
 	$datetime = date ("Y-m-d H:i:s");
@@ -95,7 +95,7 @@ function _ListDelete($uno,$gno,$lno){
 function _ItemSelect($uno,$gno,$lno){
 	$query = "SELECT * FROM TB_Item WHERE UNO = '$uno' AND GNO = '$gno' AND LNO = '$lno'";
 	$stid = _SQLOpen($GLOBALS['db'],$query);
-	return $stid
+	return $stid;
 }
 function _ItemCreate($uno,$gno,$lno,$ititle,$iconten){
 	$datetime = date ("Y-m-d H:i:s");
@@ -115,7 +115,7 @@ function _ItemDelete($uno,$gno,$lno){
 	$stid = _SQLExecu($GLOBALS['db'],$query);
 }
 
-function _ItemCreate($uno){}
-function _ItemEdit($uno){}
-function _ItemDelete($uno){}
+// function _ItemCreate($uno){}
+// function _ItemEdit($uno){}
+// function _ItemDelete($uno){}
 
