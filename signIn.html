@@ -1,3 +1,55 @@
+<?php 
+  // include_once "../Main.php"; 
+  if (!isset($_SESSION)) {
+    session_start();
+  }
+
+  function _dbconnect(){
+  $db = "oci:dbname=(description=(address=(protocol=tcp)(host=140.117.69.58)(port=1521))(connect_data=(sid=ORCL)));charset=utf8";
+  $username = "Group17";
+  $password = "group171717";
+  try {
+      $conn = new PDO($db, $username, $password);
+  } catch (PDOException $e) {
+      echo $e->getMessage();
+  }
+    return $conn;
+  }
+
+  function _SQLOpen($dbcon,$query)
+  {
+    try {
+      $result = $dbcon->query($query);
+    } catch (PDOException $e){
+      $result = $e->getMessage();
+    }
+    return $result;
+  }
+
+  function _SQLExecu($dbcon,$query)
+  {
+    try {
+      $result = $dbcon->exec($query);
+    } catch (PDOException $e){
+      $result = $e->getMessage();
+    } 
+    echo $result;
+  }
+  global $db;
+  $db = _dbconnect();
+  function _Login($uno,$pwd)
+  {
+    $query = "SELECT * FROM TB_USER WHERE UNO = '$uno' AND PWD = '$pwd'";
+    $result = $db->query($query)->fetchAll();
+    if(count($result) > 0){
+      $_SESSION['UNO'] = $_POST['account'];
+          header("../index.html");
+    }else{
+      echo " 登入失敗 ";
+    }
+  }
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -14,22 +66,23 @@
     <div class="signInContent">
       <div class="logo"><img src="./images/Logo_mainpng" alt=""></div>
       <div class="conter">  
+        <form name="form" method="post" action="Main.php">
         <div class="input">
-          <div class="item">
+          <div class="item">          
             <label for="account">帳號</label>
-            <input id="account" type="text" name="" id="">
+            <input id="account" type="text" name="account">
           </div>
           <div class="item">
             <label for="password">密碼</label>
-            <input id="password" type="text" name="" id="">
+            <input id="password" type="text" name="password">
           </div>
         </div>
-        <div class="tool">
-          <input type="button" value="登入">
+          <div class="tool">
+          <input type="submit" value="登入" name="submit">
           <div class="p">沒有帳號<span><a href="#">點我註冊</a></span></div>
         </div>
-      </div>
-      
+      </form>
+      </div>      
     </div>
   </div>
 </body>

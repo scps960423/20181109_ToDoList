@@ -1,34 +1,57 @@
 <?php
-include_once "../connect.php"; 
+if (!isset($_SESSION)) {
+    session_start();
+ }
+function _dbconnect(){
+	$db = "oci:dbname=(description=(address=(protocol=tcp)(host=140.117.69.58)(port=1521))(connect_data=(sid=ORCL)));charset=utf8";
+	$username = "Group17";
+	$password = "group171717";
+	try {
+	    $conn = new PDO($db, $username, $password);
+	} catch (PDOException $e) {
+	    echo $e->getMessage();
+	}
+	return $conn;
+}
+
+function _SQLOpen($dbcon,$query)
+{
+	try {
+		$result = $dbcon->query($query);
+	} catch (PDOException $e){
+		$result = $e->getMessage();
+	}
+	return $result;
+}
+
+function _SQLExecu($dbcon,$query)
+{
+	try {
+		$result = $dbcon->exec($query);
+	} catch (PDOException $e){
+		$result = $e->getMessage();
+	}	
+	echo $result;
+}
 global $db;
 $db = _dbconnect();
-$uno = 'a';
-$pwd = 'a';
-$query = "SELECT * FROM TB_USER WHERE UNO = '$uno' AND PWD = '$pwd'";
-$stid = _SQLOpen($db,$query);
-foreach($stid as $row){
-    echo $row['UNO']."<br>";
-    echo $row['PWD']."<br>";
-    echo $row['UNAME']."<br>";
-    echo $row['EMAIL']."<br>";
-}
 date_default_timezone_set('Asia/Taipei');
+
+if($_POST['submit'])
+{
+	_Login($_POST['account'],$_POST['password']);
+}
+
 function _Login($uno,$pwd)
 {
 	$query = "SELECT * FROM TB_USER WHERE UNO = '$uno' AND PWD = '$pwd'";
-	$stid = _SQLOpen($GLOBALS['db'],$query);
-	if($stid->columnCount() > 0){
-		return 1;
+	$result = $db->query($query)->fetchAll();
+	if(count($result) > 0){
+		$_SESSION['UNO'] = $_POST['account'];
+      	header("../index.html");
 	}else{
-		return 0;
+		echo " 登入失敗 ";
 	}
-}
-
-if(_Login('a','a'))
-{
-	echo "T";
-}else{
-	echo "F";
 }
 
 function _AccountCheck($uno)
@@ -52,11 +75,10 @@ function _AccountCreate($uno,$pwd,$uname,$email)
 		$stid = _SQLExecu($GLOBALS['db'],$query);
 	}
 }
-
 function _GroupSelect($uno){
 	$query = "SELECT * FROM TB_GROUP WHERE UNO = '$uno'";
 	$stid = _SQLOpen($GLOBALS['db'],$query);
-	return $stid
+	return $stid;
 }
 function _GroupCreate($uno,$gtitle){
 	$query = "INSERT INTO TB_GROUP(UNO,TITLE) VALUES ('$uno','$gtitle')";
