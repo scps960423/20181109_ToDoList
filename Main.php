@@ -1,5 +1,5 @@
 <?php
-include_once "../htdocs/connect.php"; 
+include_once "../connect.php"; 
 global $db;
 $db = _dbconnect();
 $uno = 'a';
