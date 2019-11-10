@@ -3,11 +3,11 @@ if (!isset($_SESSION)) {
     session_start();
  }
 function _dbconnect(){
-	$db = "oci:dbname=(description=(address=(protocol=tcp)(host=140.117.69.58)(port=1521))(connect_data=(sid=ORCL)));charset=utf8";
+	$dbs = "oci:dbname=(description=(address=(protocol=tcp)(host=140.117.69.58)(port=1521))(connect_data=(sid=ORCL)));charset=utf8";
 	$username = "Group17";
 	$password = "group171717";
 	try {
-	    $conn = new PDO($db, $username, $password);
+	    $conn = new PDO($dbs, $username, $password);
 	} catch (PDOException $e) {
 	    echo $e->getMessage();
 	}
@@ -37,7 +37,7 @@ global $db;
 $db = _dbconnect();
 date_default_timezone_set('Asia/Taipei');
 
-if($_POST['submit'])
+if(isset($_POST['submit_Login']))
 {
 	_Login($_POST['account'],$_POST['password']);
 }
@@ -87,6 +87,7 @@ function _GroupSelect($uno){
 }
 function _GroupCreate($uno,$gtitle){
 	$query = "INSERT INTO TB_GROUP(UNO,TITLE) VALUES ('$uno','$gtitle')";
+	echo $query;
 	$stid = _SQLExecu($GLOBALS['db'],$query);
 }
 function _GroupEdit($uno,$gno,$gtitle){

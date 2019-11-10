@@ -1,23 +1,8 @@
 <?php
-
+include("Main.php");
 /*連線資料，點下新增時*/
-if ($_POST['submit']) {
-  //db host&port&sid + user & password
-  $db = "oci:dbname=(description=(address=(protocol=tcp)(host=140.117.69.58)(port=1521))(connect_data=(sid=ORCL)));charset=utf8";
-  $username = "Group17";
-  $password = "group171717";
-  try {
-    $options = array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8');
-    $dbh = new PDO($db, $username, $password);
-    //下達INSERT INTO 的語法 
-    $query = "INSERT INTO tb_group (TITLE) VALUES ('" . $_POST['TITLE'] . "')";
-    $result = $dbh->prepare("$query");
-    $result->execute();
-    //header("location:http://localhost/Project1/list.php");
-  } catch (PDOException $e) {
-    return ("DB connect Error!: $e->getMessage()");
-    die();
-  }
+if (isset($_POST['submit_g_create'])) {
+  _GroupCreate($_SESSION['UNO'],$_POST['gtitle']);
 }
 ?>
 
@@ -83,8 +68,10 @@ if ($_POST['submit']) {
           <div class="title">{{list[0].name}}</div>
           <div class="content">
             <div class="tool">
-              <div class="input"><input name="TITLE" type="text" id="TITLE"></div>
-              <div class="addBut"><a href="#"><input name="submit" type="submit" id="submit" value="新增"></a></div>
+            <form name="form" method="post" action="">
+              <div class="input"><input name="gtitle" type="text" id="TITLE"></div>
+              <div class="addBut"><a href="#"><input name="submit_g_create" type="submit" id="submit" value="新增"></a></div>
+            </form>
             </div>
 
             <div class="list">

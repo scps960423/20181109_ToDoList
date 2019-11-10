@@ -1,11 +1,10 @@
 <?php 
-  include_once "Main.php"; 
   if (!isset($_SESSION)) {
     session_start();
   }
   global $db;
   $db = _dbconnect();
-  if($_POST['submit'])
+  if(isset($_POST['submit']))
   {
     _Login($_POST['account'],$_POST['password']);
   }
