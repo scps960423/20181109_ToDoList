@@ -1,6 +1,8 @@
 <?php
   include("Main.php");
-  /*連線資料，點下新增時*/
+
+  
+  /*取session的NUO &UNAME數值 */
   if (isset($_POST['submit_g_create'])) {
     _GroupCreate($_SESSION['UNO'],$_POST['gtitle']);
   }
@@ -65,7 +67,7 @@
         "page": true
       },
       {
-        "name": "我分享的清單",
+        "name": "清單",
         "page": false
       },
       {
@@ -83,8 +85,11 @@
         to do List
       </div>
       <div class="moduleUser">
+
+        
         <div class="test">hi!<span><?php echo $_SESSION['UNAME']; ?> </span></div>
         <div class="tool"><a href="signIn.php">Sign out</a></div>
+
       </div>
     </div>
     <div class="baseFrame" id="toDoList">
@@ -98,14 +103,18 @@
       <div class="baseContent">
         <div class="page" v-if="list[0].page==true">
           <div class="title">{{list[0].name}}</div>
+<!--新增開始-->
           <div class="content">
+            <form action="DB_Insert.php" method="get">
             <div class="tool">
-            <form name="form" method="post" action="">
-              <div class="input"><input name="gtitle" type="text" id="TITLE"></div>
-              <div class="addBut"><a href="#"><input name="submit_g_create" type="submit" id="submit" value="新增"></a></div>
-            </form>
+            <!--先給Uno固定給Session傳入的值，傳入DB_Insert做為值來新增欄位-->
+            <input type="Hidden" name="Insert_UNO" value="<?php echo $_SESSION['UNO'];?>">
+            <font>新的類別:</font>
+            <input type="text" name="Insert_TITLE">
+            <!--Q CSS套不到下面的Input上-->
+            <input type="submit" value="新增">
             </div>
-
+<!--新增結束-->
             <div class="list">
               <ul>
                 <?php
@@ -124,10 +133,29 @@
                   while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
                     ?>
                     <li>
-                      <div class="name"><?php echo $row["TITLE"]; ?></div>
-                      <div class="tool">
-                        <a href="http://" class="edit">編輯</a>
-                        <a href="http://" class="delete">刪除</a>
+                         <!--傳值到LIST開始-->
+                        <div class="name"><a href="List/List.php?GNO=<?php  echo $row["GNO"];?> &
+                        										 UNO=<?php  echo $_SESSION['UNO'];?> ">
+                        <?php echo $row["TITLE"]; ?>										
+                        </a>
+                        </div>
+                        <!--傳值到LIST結束-->
+                        <div class="tool">
+                        <!--編輯Start-->
+                        <form action="DB_UPDATE.php" method="get">
+                        <!--Hidden 要傳送的GNO & UNO-->
+                        <input type="Hidden" name="GNO" value="<?php  echo $row["GNO"];?>"> 
+                        <input type="Hidden" name="UNO" value="<?php  echo $row["UNO"];?>"> 
+                        <!--Q3：讓修改在點編輯的狀況下才出現輸入文字框-->
+                        <input type="text" name="NEW_TITLE">
+                        <!--提交按鈕型態為submit「傳送資料」-->
+                        <!--Q1：套用不上CSS-->
+                       <div class="edit">
+                    <input type="submit" value="修改">
+                    </div>
+                  </form>
+                  <!--編輯結束-->
+                        <a href="DB_Delete.php?GNO=<?php  echo $row["GNO"];?>"class="delete">刪除</a>
                       </div>
                     </li>
                 <?php
@@ -142,22 +170,25 @@
                   <div class="name"><a href="http://">HOME</a></div>
                   <div class="tool">
                     <a href="http://" class="edit">編輯</a>
-                    <a href="http://" class="delete">刪除</a>
+                    <a href="http://" class="delete">刪除</a>  
                   </div>
                 </li>
               </ul>
             </div>
           </div>
         </div>
-        <div class="page" v-if="list[1].page==true">
+
+         <div class="page" v-if="list[1].page==true">
           <div class="title">{{list[1].name}}</div>
           <div class="content"></div>
         </div>
         <div class="page" v-if="list[2].page==true">
           <div class="title">{{list[2].name}}</div>
-          <div class="content"></div>
-        </div>
+          <div class="content">
+          	
 
+          </div>
+        </div>
       </div>
     </div>
 
