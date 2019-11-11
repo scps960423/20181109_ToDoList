@@ -84,7 +84,7 @@ function _AccountCreate($uno,$pwd,$uname,$email)
 		$stid = _SQLExecu($GLOBALS['db'],$query);
 		echo '<script type="text/javascript">';
         echo 'alert("註冊成功");'; 
-        echo "location.href = 'index.php'";    
+        echo "location.href = 'signIn.php'";    
         echo '</script>';   
 	}
 }
