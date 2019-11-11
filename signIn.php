@@ -1,28 +1,7 @@
 <?php 
+  include("Main.php");
   if (!isset($_SESSION)) {
     session_start();
-  }
-  global $db;
-  $db = _dbconnect();
-  if(isset($_POST['submit']))
-  {
-    _Login($_POST['account'],$_POST['password']);
-  }
-  function _Login($uno,$pwd)
-  {
-    try { 
-      $query = "SELECT * FROM TB_USER WHERE UNO = '$uno' AND PWD = '$pwd'";
-      $stid = _SQLOpen($GLOBALS['db'],$query);
-      $result = $stid->fetchAll();
-      if(count($result) > 0){
-        $_SESSION['UNO'] = $_POST['account'];
-            header("Location:index.php");
-      }else{
-        echo " 登入失敗 ";
-      }
-    } catch (PDOException $e) {
-        echo $e->getMessage();
-    }
   }
 
 ?>
@@ -42,7 +21,18 @@
     <div class="signInContent">
       <div class="logo"><img src="./images/Logo_mainpng" alt=""></div>
       <div class="conter">  
-        <form name="form" method="post" action="">
+         <?php 
+              if(isset($_POST['submit_Signup']))//1
+              {
+                  echo '<label for="account">SignUp</label>';
+              }
+              else
+              {
+                  echo '<label for="account">Login</label>';
+              }
+
+          ?>
+        <form name="form" method="post" action="Main.php">
         <div class="input">
           <div class="item">          
             <label for="account">帳號</label>
@@ -52,12 +42,46 @@
             <label for="password">密碼</label>
             <input id="password" type="text" name="password">
           </div>
-        </div>
-          <div class="tool">
-          <input type="submit" value="登入" name="submit">
-          <div class="p">沒有帳號<span><a href="#">點我註冊</a></span></div>
-        </div>
-      </form>
+         <?php 
+             if(isset($_POST['submit_Signup']))//1
+              {
+               
+                echo '<div class="item"> ';         
+                echo '  <label for="uname">姓名</label>';
+                echo '  <input id="uname" type="text" name="uname">';
+                echo '</div>';
+                echo '<div class="item">';
+                echo '  <label for="email">E-MAIL</label>';
+                echo '  <input id="email" type="text" name="email">';
+                echo '</div>';
+                echo '<form name="form" method="post" action="">';
+                echo '<input type="submit" value="確認註冊" name="submit_Signup1">';//2
+                echo '<input type="submit" value="取消" name="submit_Signup2">';
+                echo '</form>';
+                echo '</form>';
+              }
+              else
+              {
+                echo '<input type="submit" value="登入" name="submit_Login">';//1
+                echo '</form>';
+                echo '<form name="form" method="post" action="">';
+                echo '<input type="submit" value="開始註冊" name="submit_Signup">';
+                echo '</form>';
+              }
+         ?>
+        </div>         
+        <?php         
+        // var_dump($_POST) ;
+          if(isset($_POST['submit_Signup1']))//2
+          {
+            echo "has into";
+            _AccountCreate($_POST['account'],$_POST['password'],$_POST['uname'],$_POST['email']);            
+          }
+          if(isset($_POST['submit_Signup2'])){
+            header('Location:signIn.php');
+          }
+        ?> 
+        <!-- </div>   -->
       </div>      
     </div>
   </div>

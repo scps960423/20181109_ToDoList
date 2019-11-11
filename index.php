@@ -1,9 +1,29 @@
 <?php
-include("Main.php");
-/*連線資料，點下新增時*/
-if (isset($_POST['submit_g_create'])) {
-  _GroupCreate($_SESSION['UNO'],$_POST['gtitle']);
-}
+  include("Main.php");
+  /*連線資料，點下新增時*/
+  if (isset($_POST['submit_g_create'])) {
+    _GroupCreate($_SESSION['UNO'],$_POST['gtitle']);
+  }
+  $uno =$_SESSION['UNO']; //uno
+  $uname = $_SESSION['UNAME']; //uname
+  $query = "SELECT u.*,g.title AS gtitle,l.title AS ltitle,l.createday AS lcreate,i.content,i.author,i.createday AS icreate,i.oncheck";
+  $query .= " FROM TB_USER u LEFT JOIN tb_group g ON u.uno=g.uno LEFT JOIN tb_list l ON g.uno=l.uno AND g.gno=l.gno LEFT ";
+  $query .= "JOIN tb_item i ON l.uno=i.uno AND l.gno=i.gno AND l.lno=i.lno WHERE u.UNO = '$uno'";
+  $stid = _SQLOpen($GLOBALS['db'],$query);
+  $resultJSON_own = json_encode($stid->fetchAll(PDO::FETCH_ASSOC)); //user自己的Group..到item的Json
+
+  $query = "SELECT u.*,g.title AS gtitle,l.title AS ltitle,l.createday AS lcreate,i.content,i.author,i.createday AS icreate,i.oncheck";
+  $query .= " FROM TB_USER u LEFT JOIN tb_group g ON u.uno=g.uno LEFT JOIN tb_list l ON g.uno=l.uno AND g.gno=l.gno LEFT ";
+  $query .= "JOIN tb_item i ON l.uno=i.uno AND l.gno=i.gno AND l.lno=i.lno WHERE u.UNO = '$uno'";
+  $stid = _SQLOpen($GLOBALS['db'],$query);
+  $resultJSON_Share = json_encode($stid->fetchAll(PDO::FETCH_ASSOC));//user分享的list的Json
+
+  $query = "SELECT u.*,g.title AS gtitle,l.title AS ltitle,l.createday AS lcreate,i.content,i.author,i.createday AS icreate,i.oncheck";
+  $query .= " FROM TB_USER u LEFT JOIN tb_group g ON u.uno=g.uno LEFT JOIN tb_list l ON g.uno=l.uno AND g.gno=l.gno LEFT ";
+  $query .= "JOIN tb_item i ON l.uno=i.uno AND l.gno=i.gno AND l.lno=i.lno WHERE u.UNO = '$uno'";
+  $stid = _SQLOpen($GLOBALS['db'],$query);
+  $resultJSON_BeShare = json_encode($stid->fetchAll(PDO::FETCH_ASSOC));//user被分享的list的Json
+
 ?>
 
 <!DOCTYPE html>
@@ -51,7 +71,7 @@ if (isset($_POST['submit_g_create'])) {
         to do List
       </div>
       <div class="moduleUser">
-        <div class="test">hi!<span>王小明</span></div>
+        <div class="test">hi!<span><?php echo $_SESSION['UNAME']; ?> </span></div>
         <div class="tool"><a href="#">Sign out</a></div>
       </div>
     </div>
@@ -86,7 +106,7 @@ if (isset($_POST['submit_g_create'])) {
                   $options = array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8');
                   $dbh = new PDO($db, $username, $password);
 
-                  $query = "SELECT * FROM TB_GROUP";
+                  $query = "SELECT * FROM TB_GROUP WHERE UNO = '$uno'";
                   $result = $dbh->prepare("$query");
                   $result->execute();
                   while ($row = $result->fetch(PDO::FETCH_ASSOC)) {

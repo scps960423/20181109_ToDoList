@@ -31,7 +31,7 @@ function _SQLExecu($dbcon,$query)
 	} catch (PDOException $e){
 		$result = $e->getMessage();
 	}	
-	echo $result;
+	// echo $result;
 }
 global $db;
 $db = _dbconnect();
@@ -42,6 +42,14 @@ if(isset($_POST['submit_Login']))
 	_Login($_POST['account'],$_POST['password']);
 }
 
+if(isset($_POST['submit_Signup1']))//2
+{
+	_AccountCreate($_POST['account'],$_POST['password'],$_POST['uname'],$_POST['email']);            
+}
+if(isset($_POST['submit_Signup2'])){
+	header('Location:signIn.php');
+}
+
 function _Login($uno,$pwd)
 {
 	try {	
@@ -50,6 +58,7 @@ function _Login($uno,$pwd)
 		$result = $stid->fetchAll();
 		if(count($result) > 0){
 			$_SESSION['UNO'] = $_POST['account'];
+			$_SESSION['UNAME'] = $result[0]['UNAME'];
 	      	header("Location:index.php");
 		}else{
 			echo " 登入失敗 ";
@@ -59,25 +68,24 @@ function _Login($uno,$pwd)
 	}
 }
 
-function _AccountCheck($uno)
-{
-	$query = "SELECT * FROM TB_USER WHERE UNO = '$uno'";
-	$stid = _SQLOpen($GLOBALS['db'],$query);
-	if($stid->columnCount() > 0){
-		return 1;
-	}else{
-		return 0;
-	}
-}	
 function _AccountCreate($uno,$pwd,$uname,$email)
 {
 	$query = "SELECT * FROM TB_USER WHERE UNO = '$uno'";
 	$stid = _SQLOpen($GLOBALS['db'],$query);
-	if($stid->columnCount() > 0){
-		echo "Account already exits!";
+	$result = $stid->fetchAll();
+
+	if(count($result) > 0 || trim($uno) == ""|| trim($pwd) == ""|| trim($uname) == ""|| trim($email) == ""){
+		echo '<script type="text/javascript">';
+        echo 'alert("註冊失敗");';
+        echo "location.href = 'signIn.php'";
+        echo '</script>';
 	}else{
 		$query = "INSERT INTO TB_USER VALUES ('$uno','$pwd','$uname','$email')";
 		$stid = _SQLExecu($GLOBALS['db'],$query);
+		echo '<script type="text/javascript">';
+        echo 'alert("註冊成功");'; 
+        echo "location.href = 'index.php'";    
+        echo '</script>';   
 	}
 }
 function _GroupSelect($uno){
