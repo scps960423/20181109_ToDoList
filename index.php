@@ -12,15 +12,19 @@
   $stid = _SQLOpen($GLOBALS['db'],$query);
   $resultJSON_own = json_encode($stid->fetchAll(PDO::FETCH_ASSOC)); //user自己的Group..到item的Json
 
-  $query = "SELECT u.*,g.title AS gtitle,l.title AS ltitle,l.createday AS lcreate,i.content,i.author,i.createday AS icreate,i.oncheck";
-  $query .= " FROM TB_USER u LEFT JOIN tb_group g ON u.uno=g.uno LEFT JOIN tb_list l ON g.uno=l.uno AND g.gno=l.gno LEFT ";
-  $query .= "JOIN tb_item i ON l.uno=i.uno AND l.gno=i.gno AND l.lno=i.lno WHERE u.UNO = '$uno'";
-  $stid = _SQLOpen($GLOBALS['db'],$query);
+  $query = "SELECT s.*,l.title AS ltitle,l.createday AS lcreate,i.content,i.author,i.createday AS icreate,i.oncheck ";
+  $query .= "FROM TB_USER u ";
+  $query .= "LEFT JOIN tb_share s ON u.uno=s.sno ";
+  $query .= "LEFT JOIN tb_list l ON s.sno=l.uno AND s.gno=l.gno ";
+  $query .= "LEFT JOIN tb_item i ON l.uno=i.uno AND l.gno=i.gno AND l.lno=i.lno WHERE u.UNO = '$uno'";
+  $stid = _SQLOpen($GLOBALS["db"],$query);
   $resultJSON_Share = json_encode($stid->fetchAll(PDO::FETCH_ASSOC));//user分享的list的Json
 
-  $query = "SELECT u.*,g.title AS gtitle,l.title AS ltitle,l.createday AS lcreate,i.content,i.author,i.createday AS icreate,i.oncheck";
-  $query .= " FROM TB_USER u LEFT JOIN tb_group g ON u.uno=g.uno LEFT JOIN tb_list l ON g.uno=l.uno AND g.gno=l.gno LEFT ";
-  $query .= "JOIN tb_item i ON l.uno=i.uno AND l.gno=i.gno AND l.lno=i.lno WHERE u.UNO = '$uno'";
+  $query = "SELECT s.*,l.title AS ltitle,l.createday AS lcreate,i.content,i.author,i.createday AS icreate,i.oncheck ";
+  $query .= "FROM TB_USER u ";
+  $query .= "LEFT JOIN tb_share s ON u.uno=s.uno ";
+  $query .= "LEFT JOIN tb_list l ON s.sno=l.uno AND s.gno=l.gno ";
+  $query .= "LEFT JOIN tb_item i ON l.uno=i.uno AND l.gno=i.gno AND l.lno=i.lno WHERE u.UNO = '$uno'";
   $stid = _SQLOpen($GLOBALS['db'],$query);
   $resultJSON_BeShare = json_encode($stid->fetchAll(PDO::FETCH_ASSOC));//user被分享的list的Json
 
