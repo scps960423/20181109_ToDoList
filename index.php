@@ -6,6 +6,11 @@
   if (isset($_POST['submit_g_create'])) {
     _GroupCreate($_SESSION['UNO'],$_POST['gtitle']);
   }
+
+  if (!isset($_SESSION['UNO'])) {
+    header("Location:signIn.php");
+ }
+
   $uno =$_SESSION['UNO']; //uno
   $uname = $_SESSION['UNAME']; //uname
   $query = "SELECT u.*,g.title AS gtitle,l.title AS ltitle,l.createday AS lcreate,i.content,i.author,i.createday AS icreate,i.oncheck";
@@ -13,6 +18,9 @@
   $query .= "JOIN tb_item i ON l.uno=i.uno AND l.gno=i.gno AND l.lno=i.lno WHERE u.UNO = '$uno'";
   $stid = _SQLOpen($GLOBALS['db'],$query);
   $resultJSON_own = json_encode($stid->fetchAll(PDO::FETCH_ASSOC)); //user自己的Group..到item的Json
+  // $json_string = json_encode($resultJSON_own, JSON_PRETTY_PRINT);
+  // echo $json_string;
+  // print_r($resultJSON_own);
 
   $query = "SELECT s.*,l.title AS ltitle,l.createday AS lcreate,i.content,i.author,i.createday AS icreate,i.oncheck ";
   $query .= "FROM TB_USER u ";
@@ -77,8 +85,11 @@
         to do List
       </div>
       <div class="moduleUser">
-        <div class="test">Hi!<span><?php echo $_SESSION['UNAME']; ?> </span></div>
-        <div class="tool"><a href="#">Sign out</a></div>
+
+        
+        <div class="test">hi!<span><?php echo $_SESSION['UNAME']; ?> </span></div>
+        <div class="tool"><a href="signIn.php">Sign out</a></div>
+
       </div>
     </div>
     <div class="baseFrame" id="toDoList">
