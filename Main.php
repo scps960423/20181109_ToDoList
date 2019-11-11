@@ -84,7 +84,7 @@ function _AccountCreate($uno,$pwd,$uname,$email)
 		$stid = _SQLExecu($GLOBALS['db'],$query);
 		echo '<script type="text/javascript">';
         echo 'alert("註冊成功");'; 
-        echo "location.href = 'index.php'";    
+        echo "location.href = 'signIn.php'";    
         echo '</script>';   
 	}
 }
@@ -95,7 +95,7 @@ function _GroupSelect($uno){
 }
 function _GroupCreate($uno,$gtitle){
 	$query = "INSERT INTO TB_GROUP(UNO,TITLE) VALUES ('$uno','$gtitle')";
-	echo $query;
+	// echo $query;
 	$stid = _SQLExecu($GLOBALS['db'],$query);
 }
 function _GroupEdit($uno,$gno,$gtitle){
