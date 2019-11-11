@@ -13,12 +13,17 @@
   try {
     $options = array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8'); 
     $dbh = new PDO($db, $username, $password);
-    $query="INSERT INTO tb_group (UNO, TITLE) VALUES ('".$_GET['Insert_UNO']."', '".$_GET['Insert_TITLE']."')"; 
-
+    $query="INSERT INTO TB_LIST  (UNO, GNO , TITLE ) VALUES ('".$_GET['List_UNO']."', '".$_GET['List_GNO']."'
+    , '".$_GET['List_TITLE']."')"; 
     $result = $dbh->prepare("$query");
     $result = $dbh->prepare("$query");
     $result->execute();
-    header("location:http://localhost/Git_Project/20181109_ToDoList/index.php");
+   
+    setcookie('echo $_GET["List_GNO"];');
+
+    header("location:http://localhost/Git_Project/20181109_ToDoList/list/list.php");
+
+
   } catch (PDOException $e) {
   return("DB connect Error!: $e->getMessage()");
   die();
@@ -36,12 +41,17 @@
 
         <tr> 
           <td width="20%" height="25"><font size="2">T1</font></td>
-          <td height="25"><input name="TELE" type="text" id="TELE" value="<?php echo $_GET["Insert_UNO"]; ?>"></td>
+          <td height="25"><input name="TELE" type="text" id="TELE" value="<?php echo $_GET["List_GNO"]; ?>"></td>
         </tr>
         <tr> 
           <td width="20%" height="25"><font size="2">T2</font></td>
-          <td height="25"><input name="CLASS" type="text" id="CLASS" value="<?php echo $_GET["Insert_TITLE"];?>"></td>
+          <td height="25"><input name="CLASS" type="text" id="CLASS" value="<?php echo $_GET["List_UNO"];?>"></td>
         </tr>
+        <tr> 
+          <td width="20%" height="25"><font size="2">T3</font></td>
+          <td height="25"><input name="CLASS" type="text" id="CLASS" value="<?php echo $_GET["List_TITLE"];?>"></td>
+        </tr>
+
 
 
 
@@ -56,7 +66,7 @@
   </tr>
   <tr> 
     <td height="25" align="center">
-    <a href="index.php"><font size="4">回到清單</font></a> 
+    <a href="LIST.php"><font size="4">回到清單</font></a> 
     </td>
   </tr>
   <br>

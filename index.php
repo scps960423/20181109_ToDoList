@@ -59,7 +59,7 @@
         "page": true
       },
       {
-        "name": "我分享的清單",
+        "name": "清單",
         "page": false
       },
       {
@@ -122,8 +122,13 @@
                   while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
                     ?>
                     <li>
-                         <!--Q5另用這個頁面連結另一個頁面當成item-->
-                        <div class="name"><a href="http://"><?php echo $row["TITLE"]; ?></a></div>
+                         <!--傳值到LIST開始-->
+                        <div class="name"><a href="List/List.php?GNO=<?php  echo $row["GNO"];?> &
+                        										 UNO=<?php  echo $_SESSION['UNO'];?> ">
+                        <?php echo $row["TITLE"]; ?>										
+                        </a>
+                        </div>
+                        <!--傳值到LIST結束-->
                         <div class="tool">
                         <!--編輯Start-->
                         <form action="DB_UPDATE.php" method="get">
@@ -161,15 +166,18 @@
             </div>
           </div>
         </div>
-        <div class="page" v-if="list[1].page==true">
+
+         <div class="page" v-if="list[1].page==true">
           <div class="title">{{list[1].name}}</div>
           <div class="content"></div>
         </div>
         <div class="page" v-if="list[2].page==true">
           <div class="title">{{list[2].name}}</div>
-          <div class="content"></div>
-        </div>
+          <div class="content">
+          	
 
+          </div>
+        </div>
       </div>
     </div>
 
