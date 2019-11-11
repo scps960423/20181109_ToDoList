@@ -151,7 +151,7 @@
                         <!--提交按鈕型態為submit「傳送資料」-->
                         <!--Q1：套用不上CSS-->
                        <div class="edit">
-                    <input type="submit" value="修改">
+                    <input  type="submit" value="修改">
                     </div>
                   </form>
                   <!--編輯結束-->
