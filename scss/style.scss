@@ -129,13 +129,22 @@ body {
           align-items: center;
         }
         .tool {
+          .editCt {
+            display: none;
+            &.is-open {
+              display: inline-block;
+              position: relative;
+              left: -10px;
+              top: -3px;
+            }
+          }
           a {
             transition: $transition;
             width: 20px;
             height: 20px;
+            border: none;
             &:hover {
-              width: 25px;
-              height: 25px;
+              border-bottom: 1px solid $color1;
             }
           }
           .edit {
@@ -166,7 +175,7 @@ body {
   }
 }
 
-.signInLayout{
+.signInLayout {
   width: 100vw;
   height: 100vh;
   // background: -webkit-linear-gradient($color1, $color2);
@@ -174,49 +183,49 @@ body {
   // background: -moz-linear-gradient($color1, $color2);
   // background: linear-gradient($color1, $color2);
   display: flex;
-  justify-content:center;
+  justify-content: center;
   align-items: center;
   background: url(../images/bg.jpeg) no-repeat;
   background-position: center;
   background-size: cover;
 }
 
-.signInContent{
+.signInContent {
   display: inline-block;
-  .logo{
+  .logo {
     margin-bottom: 10px;
     text-align: center;
     font-size: 1.5em;
-    img{
+    img {
       width: 240px;
     }
   }
-  .conter{
+  .conter {
     background: $white;
     border-radius: 10px;
-    box-shadow:0 1px 3px #7b7b7b;
-    padding:  30px;
-    .input{
-      .item{
+    box-shadow: 0 1px 3px #7b7b7b;
+    padding: 30px;
+    .input {
+      .item {
         margin: 10px 0;
-        input{
+        input {
           line-height: 2;
           border-radius: 4px;
           border: 1px solid #ccc;
         }
       }
     }
-    .tool{
+    .tool {
       text-align: center;
       margin-top: 15px;
-      input{
+      input {
         font-size: 1em;
         margin-bottom: 15px;
-        padding: 3px 5px ;
+        padding: 3px 5px;
         border: 1px solid $gray1;
         border-radius: 4px;
       }
-      .p{
+      .p {
         color: $gray1;
       }
     }
