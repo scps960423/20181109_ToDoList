@@ -139,9 +139,9 @@
                     ?>
 
                     <li>
-                    	 <div class="name"><a href="list/list.php?GNO=<?php  echo $row["GNO"];?> &
-                                                            UNO=<?php  echo $_SESSION['UNO'];?>&
-                                                            GNAME= <?php echo $row["TITLE"]; ?> ">
+                    	 <div class="name"><a href="List/List.php?GNO=<?php  echo $row["GNO"];?> &
+                                                           UNO=<?php  echo $_SESSION['UNO'];?>&
+                                                           GNAME= <?php echo $row["TITLE"]; ?> ">
                   		 <!--顯示-->
                   		 <?php echo $row["TITLE"]; ?>                                           
                   		 </a></div>
@@ -197,10 +197,7 @@
                   foreach ($result as $row ) {
                     ?>
                 <li>
-                    <div class="name"><a href="http://">
-                    <?php echo $row["GNAME"]; ?>類別:
-
-                    <?php echo $row["TITLE"]; ?></a></div>
+                    <div class="name"><a href="http://"><?php echo $row["TITLE"]; ?></a></div>
                     <div class="tool">
                     <a href="http://" class="edit">編輯</a>
                     <a href="http://" class="delete">刪除</a>
