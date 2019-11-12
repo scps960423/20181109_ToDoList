@@ -1,8 +1,5 @@
-
-
 <?php
   include("Main.php");
-   
 
   
   /*取session的NUO &UNAME數值 */
@@ -40,11 +37,6 @@
   $query .= "LEFT JOIN tb_item i ON l.uno=i.uno AND l.gno=i.gno AND l.lno=i.lno WHERE u.UNO = '$uno'";
   $stid = _SQLOpen($GLOBALS['db'],$query);
   $resultJSON_BeShare = json_encode($stid->fetchAll(PDO::FETCH_ASSOC));//user被分享的list的Json
-
-  /*連線資料*/
-  $db = "oci:dbname=(description=(address=(protocol=tcp)(host=140.117.69.58)(port=1521))(connect_data=(sid=ORCL)));charset=utf8";
-  $username = "Group17";
-  $password = "group171717";
 
 ?>
 
@@ -95,7 +87,7 @@
       <div class="moduleUser">
 
         
-        <div class="test">Hi!<span><?php echo $_SESSION['UNAME']; ?> </span></div>
+        <div class="test">hi!<span><?php echo $_SESSION['UNAME']; ?> </span></div>
         <div class="tool"><a href="signIn.php">Sign out</a></div>
 
       </div>
@@ -110,26 +102,27 @@
       </div>
       <div class="baseContent">
         <div class="page" v-if="list[0].page==true">
-          <div class="title">【<?php echo $uname ?>】的{{list[0].name}}</div>
+          <div class="title">{{list[0].name}}</div>
+<!--新增開始-->
           <div class="content">
-
-    		<!--新增開始-->
             <form action="DB_Insert.php" method="get">
+            <div class="tool">
             <!--先給Uno固定給Session傳入的值，傳入DB_Insert做為值來新增欄位-->
+            <input type="Hidden" name="Insert_UNO" value="<?php echo $_SESSION['UNO'];?>">
             <font>新的類別:</font>
-
-            <input type="Hidden" name="Insert_UNO" value="<?php echo $uno ;?>">
-            <input type="text"   name="Insert_TITLE">
-            <input type="submit" value="新增" >
-            </from>
-			<!--新增結束-->
-
-           
+            <input type="text" name="Insert_TITLE">
+            <!--Q CSS套不到下面的Input上-->
+            <input type="submit" value="新增">
+            </div>
 <!--新增結束-->
-
             <div class="list">
               <ul>
                 <?php
+
+                $db = "oci:dbname=(description=(address=(protocol=tcp)(host=140.117.69.58)(port=1521))(connect_data=(sid=ORCL)));charset=utf8";
+                $username = "Group17";
+                $password = "group171717";
+
                 try {
                   $options = array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8');
                   $dbh = new PDO($db, $username, $password);
@@ -139,99 +132,63 @@
                   $result->execute();
                   while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
                     ?>
-
                     <li>
-                    	 <div class="name"><a href="List/List.php?GNO=<?php  echo $row["GNO"];?> &
-                                                           UNO=<?php  echo $_SESSION['UNO'];?>&
-                                                           GNAME= <?php echo $row["TITLE"]; ?> ">
-                  		 <!--顯示-->
-                  		 <?php echo $row["TITLE"]; ?>                                           
-                  		 </a></div>
-
-                     <div class="tool">
-                        <!--類別更新開始-->
-                        <font>修改內容：</font>
-                   		<form action="DB_UPDATE.php" method="get">
-                    	<input type="hidden" name="GNO" value="<?php  echo $row["GNO"];?>">
-                    	<input type="hidden" name="UNO" value="<?php  echo $uno;?>">
-                    	<input type="text"   name="NEW_TITLE">&nbsp;&nbsp;
-                    	<input type="submit" value="修改">
-                    	</form>
-                        <!--類別更新結束-->
-                        &nbsp;&nbsp;
-                    	<!--LIST刪除開始-->
-                   		<a href="DB_Delete.php?GNO=<?php  echo $row["GNO"];?>&
-                                                 UNO=<?php  echo $_SESSION['UNO'];?>"
-                        class="delete">刪除</a>
-                        <!--LIST刪除結束-->
-                     </div>
-
+                         <!--傳值到LIST開始-->
+                        <div class="name"><a href="List/List.php?GNO=<?php  echo $row["GNO"];?> &
+                        										 UNO=<?php  echo $_SESSION['UNO'];?> ">
+                        <?php echo $row["TITLE"]; ?>										
+                        </a>
+                        </div>
+                        <!--傳值到LIST結束-->
+                        <div class="tool">
+                        <!--編輯Start-->
+                        <form action="DB_UPDATE.php" method="get">
+                        <!--Hidden 要傳送的GNO & UNO-->
+                        <input type="Hidden" name="GNO" value="<?php  echo $row["GNO"];?>"> 
+                        <input type="Hidden" name="UNO" value="<?php  echo $row["UNO"];?>"> 
+                        <!--Q3：讓修改在點編輯的狀況下才出現輸入文字框-->
+                        <input type="text" name="NEW_TITLE">
+                        <!--提交按鈕型態為submit「傳送資料」-->
+                        <!--Q1：套用不上CSS-->
+                       <div class="edit">
+                    <input type="submit" value="修改">
+                    </div>
+                  </form>
+                  <!--編輯結束-->
+                        <a href="DB_Delete.php?GNO=<?php  echo $row["GNO"];?>"class="delete">刪除</a>
+                      </div>
                     </li>
-                <?php /*wHILE 下半段*/
+                <?php
                   }
                 } catch (PDOException $e) {
                   return ("DB connect Error!: $e->getMessage()");
                   die();
                 }
+
                 ?>
+                <li>
+                  <div class="name"><a href="http://">HOME</a></div>
+                  <div class="tool">
+                    <a href="http://" class="edit">編輯</a>
+                    <a href="http://" class="delete">刪除</a>  
+                  </div>
+                </li>
               </ul>
             </div>
           </div>
         </div>
 
-         <div class="page" v-if="list[1].page==true"></a>
-          <div class="title">【<?php echo $uname ?>】的{{list[1].name}}
-          </div>
-          <div class="content">
-
-          </div>
+         <div class="page" v-if="list[1].page==true">
+          <div class="title">{{list[1].name}}</div>
+          <div class="content"></div>
         </div>
         <div class="page" v-if="list[2].page==true">
-          <div class="title">【<?php echo $uname ?>】的{{list[2].name}}</div>
-           <div class="content">
-            <!--Q在這個清單上做一個跳轉到/list/list.php上-->
-            <div class="list">
-              <ul>
-              	<!--被分享清單select及顯示-->
-             	<?php
-                 /*顯示 While 上半段*/
-                try {
-                  $options = array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8');
-                  $dbh = new PDO($db, $username, $password);
+          <div class="title">{{list[2].name}}</div>
+          <div class="content">
+          	
 
-                  $query2 = "SELECT * FROM TB_SHARE JOIN TB_LIST ON(TB_SHARE.GNO = TB_LIST.GNO) WHERE SNO = '$uno'"  ;
-                  //顯示SQL
-                  //echo "$query2";
-                  $result = $dbh->query("$query2");
-
-                  foreach ($result as $row ) {
-                    ?>
-                <li>
-                   <div class="name"><a href="index.php"><?php echo $row["TITLE"]; ?>
-                   	＜擁有者：<?php echo $row["UNO"]; ?>＞</a></div>
-                   	<!--
-                   	<div class="tool">
-                       <a href="Db_Share_Del.php?SNO=<?php echo $uno ;?>&
-                       							 GNO=<?php echo $row["GNO"]; ?> &
-                       							 LNO=<?php echo $row["LNO"]; ?> &
-                       							 UNO=<?php echo $row["UNO"]; ?>
-
-                       	" Class = "delete">
-                       刪除</a>
-                    </div>-->
-                </li>
-                <!--顯示 While下半段-->
-                <?php
-                      }
-                        } catch (PDOException $e) {
-                          return ("DB connect Error!: $e->getMessage()");
-                          die();
-                        }
-                ?>
-              </ul>
-            </div>
-          </div> 
-          
+          </div>
+        </div>
       </div>
     </div>
 

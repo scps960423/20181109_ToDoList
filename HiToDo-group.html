@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<!-- saved from url=(0044)http://localhost/20181109_ToDoList/index.php -->
+<html lang="en"><script src="chrome-extension://ljdobmomdgdljniojadhoplhkpialdid/page/prompt.js"></script><script src="chrome-extension://ljdobmomdgdljniojadhoplhkpialdid/page/runScript.js"></script><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/rect.css">
+  <script src="http://code.jquery.com/jquery-3.4.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <title>HiToDo</title>
+  <script>
+    var $groupTool = $('.baseContent .content .tool'),
+      $addBut = $groupTool.find('.addBut a'),
+      $input = $groupTool.find('.input');
+
+    $addBut.click(function(e) {
+      e.preventDefault();
+      console.log($(this)[0]);
+      $input.toggleClass('is-active');
+    });
+    var json_baseDate = [{
+        "name": "類別",
+        "page": true
+      },
+      {
+        "name": "清單",
+        "page": false
+      },
+      {
+        "name": "共享的清單",
+        "page": false
+      }
+    ];
+  </script>
+<style type="text/css">/*
+ * contextMenu.js v 1.4.0
+ * Author: Sudhanshu Yadav
+ * s-yadav.github.com
+ * Copyright (c) 2013 Sudhanshu Yadav.
+ * Dual licensed under the MIT and GPL licenses
+**/
+
+.iw-contextMenu {
+    box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.10) !important;
+    border: 1px solid #c8c7cc !important;
+    border-radius: 11px !important;
+    display: none;
+    z-index: 1000000132;
+    max-width: 300px !important;
+    width: auto !important;
+}
+
+.dark-mode .iw-contextMenu,
+.TnITTtw-dark-mode.iw-contextMenu,
+.TnITTtw-dark-mode .iw-contextMenu {
+    border-color: #747473 !important;
+}
+
+.iw-cm-menu {
+    background: #fff !important;
+    color: #000 !important;
+    margin: 0px !important;
+    padding: 0px !important;
+    overflow: visible !important;
+}
+
+.dark-mode .iw-cm-menu,
+.TnITTtw-dark-mode.iw-cm-menu,
+.TnITTtw-dark-mode .iw-cm-menu {
+    background: #525251 !important;
+    color: #FFF !important;
+}
+
+.iw-curMenu {
+}
+
+.iw-cm-menu li {
+    font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, Arial, Ubuntu, sans-serif !important;
+    list-style: none !important;
+    padding: 10px !important;
+    padding-right: 20px !important;
+    border-bottom: 1px solid #c8c7cc !important;
+    font-weight: 400 !important;
+    cursor: pointer !important;
+    position: relative !important;
+    font-size: 14px !important;
+    margin: 0 !important;
+    line-height: inherit !important;
+    border-radius: 0 !important;
+    display: block !important;
+}
+
+.dark-mode .iw-cm-menu li, .TnITTtw-dark-mode .iw-cm-menu li {
+    border-bottom-color: #747473 !important;
+}
+
+.iw-cm-menu li:first-child {
+    border-top-left-radius: 11px !important;
+    border-top-right-radius: 11px !important;
+}
+
+.iw-cm-menu li:last-child {
+    border-bottom-left-radius: 11px !important;
+    border-bottom-right-radius: 11px !important;
+    border-bottom: none !important;
+}
+
+.iw-mOverlay {
+    position: absolute !important;
+    width: 100% !important;
+    height: 100% !important;
+    top: 0px !important;
+    left: 0px !important;
+    background: #FFF !important;
+    opacity: .5 !important;
+}
+
+.iw-contextMenu li.iw-mDisable {
+    opacity: 0.3 !important;
+    cursor: default !important;
+}
+
+.iw-mSelected {
+    background-color: #F6F6F6 !important;
+}
+
+.dark-mode .iw-mSelected, .TnITTtw-dark-mode .iw-mSelected {
+    background-color: #676766 !important;
+}
+
+.iw-cm-arrow-right {
+    width: 0 !important;
+    height: 0 !important;
+    border-top: 5px solid transparent !important;
+    border-bottom: 5px solid transparent !important;
+    border-left: 5px solid #000 !important;
+    position: absolute !important;
+    right: 5px !important;
+    top: 50% !important;
+    margin-top: -5px !important;
+}
+
+.dark-mode .iw-cm-arrow-right, .TnITTtw-dark-mode .iw-cm-arrow-right {
+    border-left-color: #FFF !important;
+}
+
+.iw-mSelected > .iw-cm-arrow-right {
+}
+
+/*context menu css end */</style><style type="text/css">@-webkit-keyframes load4 {
+    0%,
+    100% {
+        box-shadow: 0 -3em 0 0.2em, 2em -2em 0 0em, 3em 0 0 -1em, 2em 2em 0 -1em, 0 3em 0 -1em, -2em 2em 0 -1em, -3em 0 0 -1em, -2em -2em 0 0;
+    }
+    12.5% {
+        box-shadow: 0 -3em 0 0, 2em -2em 0 0.2em, 3em 0 0 0, 2em 2em 0 -1em, 0 3em 0 -1em, -2em 2em 0 -1em, -3em 0 0 -1em, -2em -2em 0 -1em;
+    }
+    25% {
+        box-shadow: 0 -3em 0 -0.5em, 2em -2em 0 0, 3em 0 0 0.2em, 2em 2em 0 0, 0 3em 0 -1em, -2em 2em 0 -1em, -3em 0 0 -1em, -2em -2em 0 -1em;
+    }
+    37.5% {
+        box-shadow: 0 -3em 0 -1em, 2em -2em 0 -1em, 3em 0em 0 0, 2em 2em 0 0.2em, 0 3em 0 0em, -2em 2em 0 -1em, -3em 0em 0 -1em, -2em -2em 0 -1em;
+    }
+    50% {
+        box-shadow: 0 -3em 0 -1em, 2em -2em 0 -1em, 3em 0 0 -1em, 2em 2em 0 0em, 0 3em 0 0.2em, -2em 2em 0 0, -3em 0em 0 -1em, -2em -2em 0 -1em;
+    }
+    62.5% {
+        box-shadow: 0 -3em 0 -1em, 2em -2em 0 -1em, 3em 0 0 -1em, 2em 2em 0 -1em, 0 3em 0 0, -2em 2em 0 0.2em, -3em 0 0 0, -2em -2em 0 -1em;
+    }
+    75% {
+        box-shadow: 0em -3em 0 -1em, 2em -2em 0 -1em, 3em 0em 0 -1em, 2em 2em 0 -1em, 0 3em 0 -1em, -2em 2em 0 0, -3em 0em 0 0.2em, -2em -2em 0 0;
+    }
+    87.5% {
+        box-shadow: 0em -3em 0 0, 2em -2em 0 -1em, 3em 0 0 -1em, 2em 2em 0 -1em, 0 3em 0 -1em, -2em 2em 0 0, -3em 0em 0 0, -2em -2em 0 0.2em;
+    }
+}
+
+@keyframes load4 {
+    0%,
+    100% {
+        box-shadow: 0 -3em 0 0.2em, 2em -2em 0 0em, 3em 0 0 -1em, 2em 2em 0 -1em, 0 3em 0 -1em, -2em 2em 0 -1em, -3em 0 0 -1em, -2em -2em 0 0;
+    }
+    12.5% {
+        box-shadow: 0 -3em 0 0, 2em -2em 0 0.2em, 3em 0 0 0, 2em 2em 0 -1em, 0 3em 0 -1em, -2em 2em 0 -1em, -3em 0 0 -1em, -2em -2em 0 -1em;
+    }
+    25% {
+        box-shadow: 0 -3em 0 -0.5em, 2em -2em 0 0, 3em 0 0 0.2em, 2em 2em 0 0, 0 3em 0 -1em, -2em 2em 0 -1em, -3em 0 0 -1em, -2em -2em 0 -1em;
+    }
+    37.5% {
+        box-shadow: 0 -3em 0 -1em, 2em -2em 0 -1em, 3em 0em 0 0, 2em 2em 0 0.2em, 0 3em 0 0em, -2em 2em 0 -1em, -3em 0em 0 -1em, -2em -2em 0 -1em;
+    }
+    50% {
+        box-shadow: 0 -3em 0 -1em, 2em -2em 0 -1em, 3em 0 0 -1em, 2em 2em 0 0em, 0 3em 0 0.2em, -2em 2em 0 0, -3em 0em 0 -1em, -2em -2em 0 -1em;
+    }
+    62.5% {
+        box-shadow: 0 -3em 0 -1em, 2em -2em 0 -1em, 3em 0 0 -1em, 2em 2em 0 -1em, 0 3em 0 0, -2em 2em 0 0.2em, -3em 0 0 0, -2em -2em 0 -1em;
+    }
+    75% {
+        box-shadow: 0em -3em 0 -1em, 2em -2em 0 -1em, 3em 0em 0 -1em, 2em 2em 0 -1em, 0 3em 0 -1em, -2em 2em 0 0, -3em 0em 0 0.2em, -2em -2em 0 0;
+    }
+    87.5% {
+        box-shadow: 0em -3em 0 0, 2em -2em 0 -1em, 3em 0 0 -1em, 2em 2em 0 -1em, 0 3em 0 -1em, -2em 2em 0 0, -3em 0em 0 0, -2em -2em 0 0.2em;
+    }
+}</style><style type="text/css">/* This is not a zero-length file! */</style></head>
+
+<body>
+  <div class="layout">
+    <div class="baseHeader">
+      <div class="logo">
+        to do List
+      </div>
+      <div class="moduleUser">
+
+        
+        <div class="test">hi!<span>a </span></div>
+        <div class="tool"><a href="http://localhost/20181109_ToDoList/signIn.php">Sign out</a></div>
+
+      </div>
+    </div>
+    <div id="toDoList" class="baseFrame"><div class="baseMenu"><div class="list"><ul><li><a href="http://localhost/20181109_ToDoList/index.php#">類別</a></li></ul><ul><li><a href="http://localhost/20181109_ToDoList/index.php#">清單</a></li></ul><ul><li><a href="http://localhost/20181109_ToDoList/index.php#">共享的清單</a></li></ul></div></div> <div class="baseContent"><div class="page"><div class="title">類別</div> <div class="content"><form action="http://localhost/20181109_ToDoList/DB_Insert.php" method="get"><div class="tool"><input type="Hidden" name="Insert_UNO" value="a"> <font>新的類別:</font> <input type="text" name="Insert_TITLE"> <input type="submit" value="新增"></div> <div class="list"><ul><li><div class="name"><a href="http://localhost/20181109_ToDoList/List/List.php?GNO=62%20&amp;%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20UNO=a">
+                        fefe										
+                        </a></div> <div class="tool"><input type="Hidden" name="GNO" value="62"> <input type="Hidden" name="UNO" value="a"> <input type="text" name="NEW_TITLE"> <div class="edit"><input type="submit" value="修改"></div> <a href="http://localhost/20181109_ToDoList/DB_Delete.php?GNO=62" class="delete">刪除</a></div></li> <li><div class="name"><a href="http://localhost/20181109_ToDoList/List/List.php?GNO=65%20&amp;%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20UNO=a">
+                        aaaa										
+                        </a></div> <div class="tool"><form action="http://localhost/20181109_ToDoList/DB_UPDATE.php" method="get"><input type="Hidden" name="GNO" value="65"> <input type="Hidden" name="UNO" value="a"> <input type="text" name="NEW_TITLE"> <div class="edit"><input type="submit" value="修改"></div></form> <a href="http://localhost/20181109_ToDoList/DB_Delete.php?GNO=65" class="delete">刪除</a></div></li> <li><div class="name"><a href="http://localhost/20181109_ToDoList/List/List.php?GNO=66%20&amp;%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20UNO=a"></a></div> <div class="tool"><form action="http://localhost/20181109_ToDoList/DB_UPDATE.php" method="get"><input type="Hidden" name="GNO" value="66"> <input type="Hidden" name="UNO" value="a"> <input type="text" name="NEW_TITLE"> <div class="edit"><input type="submit" value="修改"></div></form> <a href="http://localhost/20181109_ToDoList/DB_Delete.php?GNO=66" class="delete">刪除</a></div></li> <li><div class="name"><a href="http://localhost/20181109_ToDoList/List/List.php?GNO=67%20&amp;%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20UNO=a"></a></div> <div class="tool"><form action="http://localhost/20181109_ToDoList/DB_UPDATE.php" method="get"><input type="Hidden" name="GNO" value="67"> <input type="Hidden" name="UNO" value="a"> <input type="text" name="NEW_TITLE"> <div class="edit"><input type="submit" value="修改"></div></form> <a href="http://localhost/20181109_ToDoList/DB_Delete.php?GNO=67" class="delete">刪除</a></div></li> <li><div class="name"><a href="http://localhost/20181109_ToDoList/List/List.php?GNO=68%20&amp;%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20UNO=a"></a></div> <div class="tool"><form action="http://localhost/20181109_ToDoList/DB_UPDATE.php" method="get"><input type="Hidden" name="GNO" value="68"> <input type="Hidden" name="UNO" value="a"> <div class="editCt"><input type="text" name="NEW_TITLE"> <input type="submit" value="確定"></div><a href="#" class="edit"></a></form> <a href="http://localhost/20181109_ToDoList/DB_Delete.php?GNO=68" class="delete">刪除</a></div></li> <li><div class="name"><a href="http://localhost/20181109_ToDoList/List/List.php?GNO=69%20&amp;%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20UNO=a">
+                        122222										
+                        </a></div> <div class="tool"><form action="http://localhost/20181109_ToDoList/DB_UPDATE.php" method="get"><input type="Hidden" name="GNO" value="69"> <input type="Hidden" name="UNO" value="a"> <input type="text" name="NEW_TITLE"> <div class="edit"><input type="submit" value="修改"></div></form> <a href="http://localhost/20181109_ToDoList/DB_Delete.php?GNO=69" class="delete">刪除</a></div></li> <li><div class="name"><a href="http:">HOME</a></div> <div class="tool"><a href="http:" class="edit">編輯</a> <a href="http:" class="delete">刪除</a></div></li></ul></div></form></div></div> <!----> <!----></div></div>
+
+  </div>
+  <script src="./js/main.js"></script>
+
+
+
+</body></html>
