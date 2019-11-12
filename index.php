@@ -2,9 +2,7 @@
 
 <?php
   include("Main.php");
-   
 
-  
   /*取session的NUO &UNAME數值 */
   if (isset($_POST['submit_g_create'])) {
     _GroupCreate($_SESSION['UNO'],$_POST['gtitle']);
@@ -90,7 +88,7 @@
   <div class="layout">
     <div class="baseHeader">
       <div class="logo">
-        to do List
+        Hi To Do
       </div>
       <div class="moduleUser">
 
@@ -141,9 +139,9 @@
                     ?>
 
                     <li>
-                    	 <div class="name"><a href="List/List.php?GNO=<?php  echo $row["GNO"];?> &
-                                                           UNO=<?php  echo $_SESSION['UNO'];?>&
-                                                           GNAME= <?php echo $row["TITLE"]; ?> ">
+                    	 <div class="name"><a href="list/list.php?GNO=<?php  echo $row["GNO"];?> &
+                                                            UNO=<?php  echo $_SESSION['UNO'];?>&
+                                                            GNAME= <?php echo $row["TITLE"]; ?> ">
                   		 <!--顯示-->
                   		 <?php echo $row["TITLE"]; ?>                                           
                   		 </a></div>
@@ -179,13 +177,50 @@
           </div>
         </div>
 
-         <div class="page" v-if="list[1].page==true"></a>
-          <div class="title">【<?php echo $uname ?>】的{{list[1].name}}
-          </div>
+        <!--清單-->
+        <div class="page" v-if="list[1].page==true"></a>
+          <div class="title">【<?php echo $uname ?>】的{{list[1].name}}</div>
           <div class="content">
+            <div class="tool"><a href="#">add+</a></div>
+            <div class="list">
+              <ul>
+                  <?php
+                   /*顯示 While 上半段*/
+                   try {
+                        $options = array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8');
+                        $dbh = new PDO($db, $username, $password);
+                        $query = "SELECT * FROM TB_LIST WHERE UNO = '".$uno."' AND GNO = '".$_SESSION['GNO']."' ";
+                        //顯示SQL
+                        //echo "$query";
+                        $result = $dbh->query("$query");
 
+                  foreach ($result as $row ) {
+                    ?>
+                <li>
+                    <div class="name"><a href="http://">
+                    <?php echo $row["GNAME"]; ?>類別:
+
+                    <?php echo $row["TITLE"]; ?></a></div>
+                    <div class="tool">
+                    <a href="http://" class="edit">編輯</a>
+                    <a href="http://" class="delete">刪除</a>
+                    </div>
+                </li>
+                <!--顯示 While下半段-->
+                <?php
+                      }
+                        } catch (PDOException $e) {
+                          return ("DB connect Error!: $e->getMessage()");
+                          die();
+                        }
+                ?>
+              </ul>
+            </div>
           </div>
         </div>
+
+
+        <!--被分享清單-->
         <div class="page" v-if="list[2].page==true">
           <div class="title">【<?php echo $uname ?>】的{{list[2].name}}</div>
            <div class="content">

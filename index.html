@@ -59,20 +59,6 @@
             <div class="tool"><a href="#">add+</a></div>
             <div class="list">
               <ul>
-                 <?php
-                 /*顯示 While 上半段*/
-                try {
-                  $options = array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8');
-                  $dbh = new PDO($db, $username, $password);
-
-                  $query = "SELECT * FROM TB_LIST WHERE UNO = '".$uno."' AND GNO = '".$_SESSION['GNO']."' ";
-                  //顯示SQL
-                  //echo "$query";
-                  $result = $dbh->query("$query");
-
-                  foreach ($result as $row ) {
-
-                    ?>
                 <li>
                   <div class="name"><a href="http://">work</a></div>
                   <div class="tool">

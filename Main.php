@@ -151,6 +151,20 @@ function _ItemDelete($uno,$gno,$lno){
 	$stid = _SQLExecu($GLOBALS['db'],$query);
 }
 
+//EJ的Fun Start---------------------------------------------------------------------------------------
+
+//導入Main的方法：include "Main.php";
+
+//抓取時間
+function  Gettime(){
+	date_default_timezone_set('Asia/Taipei');
+	$Gettime = date("Y/m/d-h:i:s");
+	echo "$Gettime";
+}
+
+//EJ的Fun End------------------------------------------------------------------------------------------
+
+
 // function _ItemCreate($uno){}
 // function _ItemEdit($uno){}
 // function _ItemDelete($uno){}
