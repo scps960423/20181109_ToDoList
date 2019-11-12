@@ -115,11 +115,15 @@
             <form action="DB_Insert.php" method="get">
             <!--先給Uno固定給Session傳入的值，傳入DB_Insert做為值來新增欄位-->
             <font>新的類別:</font>
+
             <input type="Hidden" name="Insert_UNO" value="<?php echo $uno ;?>">
             <input type="text"   name="Insert_TITLE">
             <input type="submit" value="新增" >
             </from>
 			<!--新增結束-->
+
+           
+<!--新增結束-->
 
             <div class="list">
               <ul>

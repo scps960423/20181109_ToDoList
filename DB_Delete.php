@@ -17,7 +17,7 @@
     echo "$query";
     $result = $dbh->prepare("$query");
     $result->execute();
-    header("location:http://localhost/Git_Project/20181109_ToDoList/index.php");
+    header("location:index.php");
   } catch (PDOException $e) {
   return("DB connect Error!: $e->getMessage()");
   die();
