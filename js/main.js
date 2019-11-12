@@ -17,26 +17,3 @@ $dynamicReport = new Vue({
     }
   }
 });
-
-$(function () {
-  var $baseCt = $('.baseContent'),
-    $page = $baseCt.find('.page');
-
-  $page.each(function (i, v) {
-    var $list = $(this).find('.list'),
-      $li = $list.find('li');
-    $li.each(function () {
-      var $tool = $(this).find('.tool'),
-        $edit = $tool.find('.edit'),
-        $text = $tool.find('.editCt'),
-        $delete = $tool.find('.delete');
-        // $delete.click(function (e) {
-        //   e.preventDefault();
-        // })
-        $edit.click(function (e) {
-          e.preventDefault();
-          $text.toggleClass('is-open');
-        })
-    })
-  })
-})

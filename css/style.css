@@ -117,23 +117,14 @@ body {
   display: flex;
   align-items: center;
 }
-.baseContent .content .list li .tool .editCt {
-  display: none;
-}
-.baseContent .content .list li .tool .editCt.is-open {
-  display: inline-block;
-  position: relative;
-  left: -10px;
-  top: -3px;
-}
 .baseContent .content .list li .tool a {
   transition: 150ms;
   width: 20px;
   height: 20px;
-  border: none;
 }
 .baseContent .content .list li .tool a:hover {
-  border-bottom: 1px solid #dd6cdd;
+  width: 25px;
+  height: 25px;
 }
 .baseContent .content .list li .tool .edit {
   font-size: 0em;

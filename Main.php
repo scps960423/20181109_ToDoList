@@ -95,7 +95,7 @@ function _GroupSelect($uno){
 }
 function _GroupCreate($uno,$gtitle){
 	$query = "INSERT INTO TB_GROUP(UNO,TITLE) VALUES ('$uno','$gtitle')";
-	// echo $query;
+	echo $query;
 	$stid = _SQLExecu($GLOBALS['db'],$query);
 }
 function _GroupEdit($uno,$gno,$gtitle){

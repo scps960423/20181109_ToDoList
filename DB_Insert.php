@@ -22,7 +22,7 @@
 
     $result = $dbh->prepare("$query");
     $result->execute();
-    header("location:index.php");
+    header("location:http://localhost/Git_Project/20181109_ToDoList/index.php");
   } catch (PDOException $e) {
   return("DB connect Error!: $e->getMessage()");
   die();
