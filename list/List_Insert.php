@@ -18,12 +18,7 @@
     $result = $dbh->prepare("$query");
     $result = $dbh->prepare("$query");
     $result->execute();
-   
-    setcookie('echo $_GET["List_GNO"];');
-
     header("location:http://localhost/Git_Project/20181109_ToDoList/list/list.php");
-
-
   } catch (PDOException $e) {
   return("DB connect Error!: $e->getMessage()");
   die();

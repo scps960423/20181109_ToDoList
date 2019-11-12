@@ -14,6 +14,7 @@
     $options = array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8'); 
     $dbh = new PDO($db, $username, $password);
     $query="delete FROM TB_Group where GNO='".$_GET['GNO']."'";
+    echo "$query";
     $result = $dbh->prepare("$query");
     $result->execute();
     header("location:http://localhost/Git_Project/20181109_ToDoList/index.php");

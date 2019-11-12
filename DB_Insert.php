@@ -10,12 +10,16 @@
   $username = "Group17";
   $password = "group171717";
 
+  $type = $_GET["group"];
+  echo "$type";
+
   try {
     $options = array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8'); 
     $dbh = new PDO($db, $username, $password);
+    
     $query="INSERT INTO tb_group (UNO, TITLE) VALUES ('".$_GET['Insert_UNO']."', '".$_GET['Insert_TITLE']."')"; 
-
     $result = $dbh->prepare("$query");
+
     $result = $dbh->prepare("$query");
     $result->execute();
     header("location:http://localhost/Git_Project/20181109_ToDoList/index.php");

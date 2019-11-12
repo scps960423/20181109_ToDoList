@@ -76,7 +76,7 @@
         // var_dump($_POST) ;
           if(isset($_POST['submit_Signup1']))//2
           {
-            echo "has into";
+
             _AccountCreate($_POST['account'],$_POST['password'],$_POST['uname'],$_POST['email']);            
           }
           if(isset($_POST['submit_Signup2'])){

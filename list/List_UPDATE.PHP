@@ -16,12 +16,13 @@
     $dbh = new PDO($db, $username, $password);
 
     /*$_GET['XXX'] ， XXX = 另一個頁面要POST過來之數值*/
-     $query="update TB_GROUP set TITLE='".$_GET['NEW_TITLE']."' 
-      where GNO='".$_GET['GNO']."' and UNO='".$_GET['UNO']."' "; 
+     $query="update TB_List set TITLE='".$_GET['NEW_LIST']."' 
+      where GNO='".$_GET['GNO']."' and UNO='".$_GET['UNO']."' and LNO='".$_GET['LNO']."'  "; 
+      echo "$query";
     $result = $dbh->prepare("$query");
     $result->execute();
     /*直接導回原頁面 */
-    header("location:http://localhost/Git_Project/20181109_ToDoList/index.php");
+    header("location:list.php");
   } catch (PDOException $e) {
   return("DB connect Error!: $e->getMessage()");
   die();
@@ -47,7 +48,11 @@
         </tr>
         <tr> 
           <td width="20%" height="25"><font size="2">T3</font></td>
-          <td height="25"><input name="CLASS" type="text" id="CLASS" value="<?php echo $_GET["NEW_TITLE"];?>"></td>
+          <td height="25"><input name="CLASS" type="text" id="CLASS" value="<?php echo $_GET["LNO"];?>"></td>
+        </tr>
+         <tr> 
+          <td width="20%" height="25"><font size="2">T4</font></td>
+          <td height="25"><input name="CLASS" type="text" id="CLASS" value="<?php  echo $_GET['NEW_LIST'];?>"></td>
         </tr>
 
 
@@ -61,7 +66,7 @@
   </tr>
   <tr> 
     <td height="25" align="center">
-    <a href="index.php"><font size="4">回到清單</font></a> 
+    <a href="list.php"><font size="4">回到清單</font></a> 
     </td>
   </tr>
 
