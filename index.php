@@ -110,7 +110,7 @@
           <div class="title">【<?php echo $uname ?>】的{{list[0].name}}</div>
           <div class="content">
 
-    		<!--新增開始-->
+        <!--新增開始-->
             <form action="DB_Insert.php" method="get">
             <!--先給Uno固定給Session傳入的值，傳入DB_Insert做為值來新增欄位-->
             <font>新的類別:</font>
@@ -119,7 +119,7 @@
             <input type="text"   name="Insert_TITLE">
             <input type="submit" value="新增" >
             </from>
-			<!--新增結束-->
+      <!--新增結束-->
 
            
 <!--新增結束-->
@@ -131,33 +131,33 @@
                   $options = array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8');
                   $dbh = new PDO($db, $username, $password);
 
-                  $query = "SELECT * FROM TB_GROUP WHERE UNO = '$uno'";
+                  $query = "SELECT * FROM TB_GROUP WHERE UNO ='$uno'";
                   $result = $dbh->prepare("$query");
                   $result->execute();
                   while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
                     ?>
 
                     <li>
-                    	 <div class="name"><a href="List/List.php?GNO=<?php echo $row["GNO"];?> &
-                                                           UNO=<?php  echo $_SESSION['UNO'];?>&
-                                                           GNAME= <?php echo $row["TITLE"]; ?> ">
-                  		 <!--顯示-->
-                  		 <?php echo $row["TITLE"]; ?>                                           
-                  		 </a></div>
+                       <div class="name"><a href="List/List.php?GNO=<?php echo $row["GNO"];?> &
+                                                                UNO=<?php echo $_SESSION['UNO'];?>&
+                                                                GNAME= <?php echo $row["TITLE"]; ?> ">
+                       <!--顯示-->
+                       <?php echo $row["TITLE"]; ?>                                           
+                       </a></div>
 
                      <div class="tool">
                         <!--類別更新開始-->
                         <font>修改內容：</font>
-                   		<form action="DB_UPDATE.php" method="get">
-                    	<input type="hidden" name="GNO" value="<?php  echo $row["GNO"];?>">
-                    	<input type="hidden" name="UNO" value="<?php  echo $uno;?>">
-                    	<input type="text"   name="NEW_TITLE">&nbsp;&nbsp;
-                    	<input type="submit" value="修改">
-                    	</form>
+                      <form action="DB_UPDATE.php" method="get">
+                      <input type="hidden" name="GNO" value="<?php  echo $row["GNO"];?>">
+                      <input type="hidden" name="UNO" value="<?php  echo $uno;?>">
+                      <input type="text"   name="NEW_TITLE">&nbsp;&nbsp;
+                      <input type="submit" value="修改">
+                      </form>
                         <!--類別更新結束-->
                         &nbsp;&nbsp;
-                    	<!--LIST刪除開始-->
-                   		<a href="DB_Delete.php?GNO=<?php echo $row["GNO"];?>&
+                      <!--LIST刪除開始-->
+                      <a href="DB_Delete.php?GNO=<?php echo $row["GNO"];?>&
                                                  UNO=<?php echo $_SESSION['UNO'];?>"
                         class="delete">刪除</a>
                         <!--LIST刪除結束-->
@@ -232,14 +232,14 @@
             <!--Q在這個清單上做一個跳轉到/list/list.php上-->
             <div class="list">
               <ul>
-              	<!--被分享清單select及顯示-->
-             	<?php
+                <!--被分享清單select及顯示-->
+              <?php
                  /*顯示 While 上半段*/
                 try {
                   $options = array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8');
                   $dbh = new PDO($db, $username, $password);
 
-                  $query3 = "SELECT * FROM TB_SHARE JOIN TB_LIST ON(TB_SHARE.GNO = TB_LIST.GNO) WHERE SNO = '$uno'"  ;
+                  $query3 = "SELECT * FROM TB_SHARE JOIN TB_LIST ON(TB_SHARE.GNO=TB_LIST.GNO) WHERE SNO ='$uno'"  ;
                   //顯示SQL
                   //echo "$query2";
                   $result = $dbh->query($query3);
@@ -248,15 +248,15 @@
                     ?>
                 <li>
                    <div class="name"><a href="index.php"><?php echo $row["TITLE"]; ?>
-                   	＜擁有者：<?php echo $row["UNO"]; ?>＞</a></div>
-                   	<!--
-                   	<div class="tool">
+                    ＜擁有者：<?php echo $row["UNO"]; ?>＞</a></div>
+                    <!--
+                    <div class="tool">
                        <a href="Db_Share_Del.php?SNO=<?php echo $uno ;?>&
-                       							 GNO=<?php echo $row["GNO"]; ?> &
-                       							 LNO=<?php echo $row["LNO"]; ?> &
-                       							 UNO=<?php echo $row["UNO"]; ?>
+                                     GNO=<?php echo $row["GNO"]; ?> &
+                                     LNO=<?php echo $row["LNO"]; ?> &
+                                     UNO=<?php echo $row["UNO"]; ?>
 
-                       	" Class = "delete">
+                        " Class = "delete">
                        刪除</a>
                     </div>-->
                 </li>
