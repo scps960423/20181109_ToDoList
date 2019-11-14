@@ -1,29 +1,31 @@
 <?php
-
+include_once "../Main.php"; 
 /*防止跳出Notice*/
   error_reporting(0);
 
-	include_once "../Main.php"; 
+
+/*連線資料*/
+    $db = "oci:dbname=(description=(address=(protocol=tcp)(host=140.117.69.58)(port=1521))(connect_data=(sid=ORCL)));charset=utf8";
+    $username = "Group17";
+    $password = "group171717";
+
+
+
+	
 	$uno = $_SESSION['UNO'];
   if (isset($_GET["GNO"]))
   {
     $_SESSION["GNO"]=$_GET["GNO"];
   }
-  $List_GNO  = $_SESSION['List_GNO'];
-  /*撈出當前類別名稱*/
+  $List_GNO=$_SESSION['List_GNO'];
+
   if (isset($_GET["GNAME"]))
   {
     $_SESSION["GNAME"]=$_GET["GNAME"];
   }
-  $GNAME  = $_SESSION['GNAME'];
+  $GNAME=$_SESSION['GNAME'];
 
-   $uname = $_SESSION['UNAME']; //uname
-?>
-<?php
-    /*連線資料*/
-    $db = "oci:dbname=(description=(address=(protocol=tcp)(host=140.117.69.58)(port=1521))(connect_data=(sid=ORCL)));charset=utf8";
-    $username = "Group17";
-    $password = "group171717";
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -85,7 +87,7 @@
                <!--UNO-->
                <input type="hidden" name="List_UNO" value="<?php echo $uno ;?>">
                <!--GNO-->
-               <input type="hidden" name="List_GNO" value="<?php echo $_SESSION['GNO'] ?>">
+               <input type="hidden" name="List_GNO" value="<?php echo $_SESSION['GNO']?>">
                <FONT>新增清單之名稱</FONT>
                <input type="text" name="List_TITLE" value="">
                <input type="submit" value="新增">
@@ -105,10 +107,15 @@
                   $result = $dbh->query("$query");
 
                   foreach ($result as $row ) {
-
                     ?>
                  <li>
-                  <div class="name"><a href="http://"><?php echo $row["TITLE"]; ?></a></div>
+        
+                  <div class="name"><a href="../item/item.php?LNO=<?php echo $row["LNO"];?> &
+                                                              GNO=<?php echo $_SESSION["GNO"]?> &
+                                                              LTITLE=<?php echo $row["TITLE"]?>
+                                                              ">
+                  
+                  <?php echo $row["TITLE"]; ?></a></div>
                   <div class="tool">
 
                     <!--LIST分享開始--> &nbsp;&nbsp;
@@ -135,8 +142,8 @@
                     &nbsp;&nbsp;
                     <!--LIST刪除開始-->
                     <a href="List_Delete.php?GNO=<?php  echo $row["GNO"];?>&
-                                              UNO=<?php  echo $_SESSION['UNO'];?> &
-                                              LNO=<?php  echo $row["LNO"];?>
+                                            UNO=<?php  echo $_SESSION['UNO'];?> &
+                                            LNO=<?php  echo $row["LNO"];?>
                       "class="delete">刪除</a>
                     <!--LIST刪除結束-->
               
@@ -173,7 +180,7 @@
     </div>
 
   </div>
-  <script src="./js/main.js"></script>
+  <script src="../js/main.js"></script>
 </body>
 
 </html>

@@ -133,22 +133,44 @@ function _ItemSelect($uno,$gno,$lno){
 	$stid = _SQLOpen($GLOBALS['db'],$query);
 	return $stid;
 }
-function _ItemCreate($uno,$gno,$lno,$ititle,$iconten){
-	$datetime = date ("Y-m-d H:i:s");
-	$query = "INSERT INTO TB_Item(UNO,GNO,LNO,TITLE,CREATEDAY) VALUES ('$uno','$gno','$LNO','$ltitle','$datetime')";
+
+/*ok----------------------------------------------------------------------------------------*/
+function _ItemCreate(){
+	$clearGNO = trim($_GET['GNO']);
+	//$datetime = date ("Y-m-d H:i:s");
+	$datetime = Gettime();
+	$query="INSERT INTO TB_Item (uno,lno,gno,content,createday,author) 
+	VALUES ('".$_GET['UNO']."','".$_GET['LNO']."','".$_GET['GNO']."','".$_GET['CONTENT']."','$datetime','".$_GET['AUTHOR']."')";
 	$stid = _SQLExecu($GLOBALS['db'],$query);
+	if(isset($_GET['UNO'])){
+		header("location:item/item.php"); 	}
+
 }
-function _ItemEditTitle($uno,$gno,$lno,$ititle){
-	$query = "UPDATE TB_Item SET TITLE = '$ititle' WHERE UNO = '$uno' AND GNO = '$gno' AND LNO = '$lno'";
+function _ItemEditTitle($uno,$gno,$lno,$ino,$edit){
+
+	/*echo $uno; 
+	echo $gno; 
+	echo $lno;*/
+	$query = "UPDATE TB_Item SET CONTENT = '$edit' WHERE UNO = '$uno'AND GNO ='$gno' AND LNO = '$lno' 
+	AND INO = '$ino'";
+	echo $query;
 	$stid = _SQLExecu($GLOBALS['db'],$query);
+	if(isset($_GET['UNO'])){
+		header("location:item/item.php"); }
 }
 function _ItemEditContent($uno,$gno,$lno,$iconten){
 	$query = "UPDATE TB_Item SET CONTENT = '$iconten' WHERE UNO = '$uno' AND GNO = '$gno' AND LNO = '$lno'";
 	$stid = _SQLExecu($GLOBALS['db'],$query);
 }
-function _ItemDelete($uno,$gno,$lno){
-	$query = "DELETE TB_Item WHERE UNO = '$uno' AND GNO = '$gno' AND LNO = '$lno'";
-	$stid = _SQLExecu($GLOBALS['db'],$query);
+function _ItemDelete($uno,$gno,$lno,$Ino){
+	$a=trim($gno);
+	//$query="delete FROM TB_Group where GNO='".$_GET['GNO']."'";
+	$query = "DELETE FROM TB_Item WHERE UNO='$uno'AND GNO='$gno'AND LNO='$lno'AND 
+	INO='".$_GET["INO"]."' ";
+	echo($query);
+	$stid =_SQLExecu($GLOBALS['db'],$query);
+	if(isset($_GET['UNO'])){
+		header("location:item/item.php"); 	}
 }
 
 //EJ的Fun Start---------------------------------------------------------------------------------------
@@ -158,9 +180,39 @@ function _ItemDelete($uno,$gno,$lno){
 //抓取時間
 function  Gettime(){
 	date_default_timezone_set('Asia/Taipei');
-	$Gettime = date("Y/m/d-h:i:s");
-	echo "$Gettime";
+	$time = date("Y/m/d-h:i:s");
+	return $time;
 }
+
+/*判定session是否為空&是否複寫*/
+
+function sesisset($get,$session){
+	 if (isset($get)){
+	 		$session=$get;
+	 	}
+  	 	$new_var=$session;
+  	 	return $new_var;
+}
+
+/*控制新增、修改、刪除*/
+$set=$_GET["set"];
+if($set==1){
+	//echo "現在新增";
+	_ItemCreate();
+}
+elseif ($set==2) {
+	//echo "現在新增";
+	_ItemEditTitle($_GET['UNO'],$_GET['GNO'],$_GET['LNO'],$_GET['INO'],$_GET['EDIT']);
+}
+elseif ($set==3) { //
+	_ItemDelete($_GET['UNO'],$_GET['GNO'],$_GET['LNO'],$_GET['INO']);
+}
+
+
+
+
+//item 的select
+
 
 //EJ的Fun End------------------------------------------------------------------------------------------
 

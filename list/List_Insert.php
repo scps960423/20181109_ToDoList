@@ -13,8 +13,7 @@
   try {
     $options = array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8'); 
     $dbh = new PDO($db, $username, $password);
-    $query="INSERT INTO TB_LIST  (UNO, GNO , TITLE ) VALUES ('".$_GET['List_UNO']."', '".$_GET['List_GNO']."'
-    , '".$_GET['List_TITLE']."')"; 
+    $query="INSERT INTO TB_LIST  (UNO, GNO , TITLE ) VALUES ('".$_GET['List_UNO']."','".$_GET['List_GNO']."','".$_GET['List_TITLE']."')"; 
     $result = $dbh->prepare("$query");
     $result = $dbh->prepare("$query");
     $result->execute();

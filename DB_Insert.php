@@ -20,7 +20,7 @@
     $query="INSERT INTO tb_group (UNO, TITLE) VALUES ('".$_GET['Insert_UNO']."', '".$_GET['Insert_TITLE']."')"; 
     $result = $dbh->prepare("$query");
 
-    $result = $dbh->prepare("$query");
+    //$result = $dbh->prepare("$query");
     $result->execute();
     header("location:index.php");
   } catch (PDOException $e) {

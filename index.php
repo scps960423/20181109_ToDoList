@@ -1,5 +1,4 @@
 
-
 <?php
   include("Main.php");
 
@@ -139,7 +138,7 @@
                     ?>
 
                     <li>
-                    	 <div class="name"><a href="List/List.php?GNO=<?php  echo $row["GNO"];?> &
+                    	 <div class="name"><a href="List/List.php?GNO=<?php echo $row["GNO"];?> &
                                                            UNO=<?php  echo $_SESSION['UNO'];?>&
                                                            GNAME= <?php echo $row["TITLE"]; ?> ">
                   		 <!--顯示-->
@@ -158,8 +157,8 @@
                         <!--類別更新結束-->
                         &nbsp;&nbsp;
                     	<!--LIST刪除開始-->
-                   		<a href="DB_Delete.php?GNO=<?php  echo $row["GNO"];?>&
-                                                 UNO=<?php  echo $_SESSION['UNO'];?>"
+                   		<a href="DB_Delete.php?GNO=<?php echo $row["GNO"];?>&
+                                                 UNO=<?php echo $_SESSION['UNO'];?>"
                         class="delete">刪除</a>
                         <!--LIST刪除結束-->
                      </div>
@@ -189,18 +188,27 @@
                    try {
                         $options = array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8');
                         $dbh = new PDO($db, $username, $password);
-                        $query = "SELECT * FROM TB_LIST WHERE UNO = '".$uno."' AND GNO = '".$_SESSION['GNO']."' ";
+                        $query2 = "SELECT LNO AS LLNO , TBL.GNO AS LGNO ,TBL.UNO AS UNO , TBG.TITLE AS G_TITLE , TBL.TITLE AS L_TITLE   
+                        FROM TB_LIST TBL join TB_GROUP TBG
+                        ON(TBL.UNO = TBG.UNO)  WHERE  TBG.UNO='$uno' ";
                         //顯示SQL
-                        //echo "$query";
-                        $result = $dbh->query("$query");
+                        echo "$query2";
+                        $result = $dbh->query($query2);
 
                   foreach ($result as $row ) {
                     ?>
                 <li>
-                    <div class="name"><a href="http://"><?php echo $row["TITLE"]; ?></a></div>
+                    <div class="name"><a href="">
+                      【
+                      <?php echo $row["G_TITLE"]; ?>】-
+                      <?php echo $row["L_TITLE"]; ?></a></div>
                     <div class="tool">
+                     <!--尚未完成--> 
                     <a href="http://" class="edit">編輯</a>
-                    <a href="http://" class="delete">刪除</a>
+                     <a href="list/List_Delete.php?GNO=<?php  echo $row["LGNO"];?>&
+                                               UNO=<?php  echo $uno ?> &
+                                               LNO=<?php  echo $row["LLNO"];?>
+                      "class="delete">刪除</a>
                     </div>
                 </li>
                 <!--顯示 While下半段-->
@@ -231,10 +239,10 @@
                   $options = array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8');
                   $dbh = new PDO($db, $username, $password);
 
-                  $query2 = "SELECT * FROM TB_SHARE JOIN TB_LIST ON(TB_SHARE.GNO = TB_LIST.GNO) WHERE SNO = '$uno'"  ;
+                  $query3 = "SELECT * FROM TB_SHARE JOIN TB_LIST ON(TB_SHARE.GNO = TB_LIST.GNO) WHERE SNO = '$uno'"  ;
                   //顯示SQL
                   //echo "$query2";
-                  $result = $dbh->query("$query2");
+                  $result = $dbh->query($query3);
 
                   foreach ($result as $row ) {
                     ?>
