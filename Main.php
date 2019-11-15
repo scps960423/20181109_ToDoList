@@ -1,4 +1,9 @@
 <?php
+
+//取出傳達要做的動作之數值
+$GLOBALS['set'] = $_GET["set"];
+
+
 if (!isset($_SESSION)) {
     session_start();
  }
@@ -88,105 +93,8 @@ function _AccountCreate($uno,$pwd,$uname,$email)
         echo '</script>';   
 	}
 }
-function _GroupSelect($uno){
-	$query = "SELECT * FROM TB_GROUP WHERE UNO = '$uno'";
-	$stid = _SQLOpen($GLOBALS['db'],$query);
-	return $stid;
-}
-function _GroupCreate($uno,$gtitle){
-	$query = "INSERT INTO TB_GROUP(UNO,TITLE) VALUES ('$uno','$gtitle')";
-	// echo $query;
-	$stid = _SQLExecu($GLOBALS['db'],$query);
-}
-function _GroupEdit($uno,$gno,$gtitle){
-	$query = "UPDATE TB_GROUP SET TITLE = '$gtitle' WHERE UNO = '$uno' AND GNO = '$gno' ";
-	$stid = _SQLExecu($GLOBALS['db'],$query);
-}
-function _GroupDelete($uno,$gno){
-	$query = "DELETE TB_GROUP WHERE UNO = '$uno' AND GNO = '$gno' ";
-	$stid = _SQLExecu($GLOBALS['db'],$query);
-}
-
-function _ListSelect($uno,$gno){
-	$query = "SELECT * FROM TB_LIST WHERE UNO = '$uno' AND GNO = '$gno'";
-	$stid = _SQLOpen($GLOBALS['db'],$query);
-	return $stid;
-}
-function _ListCreate($uno,$gno,$ltitle){
-	$datetime = date ("Y-m-d H:i:s");
-	$query = "INSERT INTO TB_LIST(UNO,GNO,TITLE,CREATEDAY) VALUES ('$uno','$gno','$ltitle','$datetime')";
-	$stid = _SQLExecu($GLOBALS['db'],$query);
-}
-function _ListEditTitle($uno,$gno,$lno,$ino,$ltitle){
-	$query = "UPDATE TB_LIST SET TITLE = '$ltitle' WHERE UNO = '$uno' AND GNO = '$gno' AND LNO = '$lno' AND INO = '$ino'";
-	$stid = _SQLExecu($GLOBALS['db'],$query);
-}
-function _ListDelete($uno,$gno,$lno){
-	$query = "DELETE TB_LIST WHERE UNO = '$uno' AND GNO = '$gno' AND LNO = '$lno'";
-	$stid = _SQLExecu($GLOBALS['db'],$query);
-	$query = "DELETE SHARE WHERE UNO = '$uno' AND GNO = '$gno' AND LNO = '$lno'";
-	$stid = _SQLExecu($GLOBALS['db'],$query);
-}
-
-function _ItemSelect($uno,$gno,$lno){
-	$query = "SELECT * FROM TB_Item WHERE UNO = '$uno' AND GNO = '$gno' AND LNO = '$lno'";
-	$stid = _SQLOpen($GLOBALS['db'],$query);
-	return $stid;
-}
-
-/*ok----------------------------------------------------------------------------------------*/
-function _ItemCreate(){
-	$clearGNO = trim($_GET['GNO']);
-	//$datetime = date ("Y-m-d H:i:s");
-	$datetime = Gettime();
-	$query="INSERT INTO TB_Item (uno,lno,gno,content,createday,author) 
-	VALUES ('".$_GET['UNO']."','".$_GET['LNO']."','".$_GET['GNO']."','".$_GET['CONTENT']."','$datetime','".$_GET['AUTHOR']."')";
-	$stid = _SQLExecu($GLOBALS['db'],$query);
-	if(isset($_GET['UNO'])){
-		header("location:item/item.php"); 	}
-
-}
-function _ItemEditTitle($uno,$gno,$lno,$ino,$edit){
-
-	/*echo $uno; 
-	echo $gno; 
-	echo $lno;*/
-	$query = "UPDATE TB_Item SET CONTENT = '$edit' WHERE UNO = '$uno'AND GNO ='$gno' AND LNO = '$lno' 
-	AND INO = '$ino'";
-	echo $query;
-	$stid = _SQLExecu($GLOBALS['db'],$query);
-	if(isset($_GET['UNO'])){
-		header("location:item/item.php"); }
-}
-function _ItemEditContent($uno,$gno,$lno,$iconten){
-	$query = "UPDATE TB_Item SET CONTENT = '$iconten' WHERE UNO = '$uno' AND GNO = '$gno' AND LNO = '$lno'";
-	$stid = _SQLExecu($GLOBALS['db'],$query);
-}
-function _ItemDelete($uno,$gno,$lno,$Ino){
-	$a=trim($gno);
-	//$query="delete FROM TB_Group where GNO='".$_GET['GNO']."'";
-	$query = "DELETE FROM TB_Item WHERE UNO='$uno'AND GNO='$gno'AND LNO='$lno'AND 
-	INO='".$_GET["INO"]."' ";
-	echo($query);
-	$stid =_SQLExecu($GLOBALS['db'],$query);
-	if(isset($_GET['UNO'])){
-		header("location:item/item.php"); 	}
-}
-
-//EJ的Fun Start---------------------------------------------------------------------------------------
-
-//導入Main的方法：include "Main.php";
-
-//抓取時間
-function  Gettime(){
-	date_default_timezone_set('Asia/Taipei');
-	$time = date("Y/m/d-h:i:s");
-	return $time;
-}
-
-/*判定session是否為空&是否複寫*/
-
-function sesisset($get,$session){
+//判定session是否為空&是否複寫
+function _sesisset($get,$session){
 	 if (isset($get)){
 	 		$session=$get;
 	 	}
@@ -194,27 +102,231 @@ function sesisset($get,$session){
   	 	return $new_var;
 }
 
-/*控制新增、修改、刪除*/
-$set=$_GET["set"];
-if($set==1){
-	//echo "現在新增";
-	_ItemCreate();
+//ok
+function _GroupSelect($uno){
+	$query = "SELECT * FROM tb_group WHERE UNO='".$uno."'";
+	$stid = _SQLOpen($GLOBALS['db'],$query);
+	return $stid;
 }
-elseif ($set==2) {
-	//echo "現在新增";
-	_ItemEditTitle($_GET['UNO'],$_GET['GNO'],$_GET['LNO'],$_GET['INO'],$_GET['EDIT']);
+//ok
+function _GroupCreate($uno,$gtitle){
+	$query = "INSERT INTO TB_GROUP(UNO,TITLE) VALUES ('$uno','$gtitle')";
+	echo $query;
+	$stid = _SQLExecu($GLOBALS['db'],$query);
+	header("location:index.php?SETVIEW=group");
+	exit();	
 }
-elseif ($set==3) { //
+//ok
+function _GroupEdit($uno,$gno,$gtitle){
+	$query = "UPDATE TB_GROUP SET TITLE = '$gtitle' WHERE UNO = '$uno' AND GNO = '$gno' ";
+	$stid = _SQLExecu($GLOBALS['db'],$query);
+	header("location:index.php?SETVIEW=group");
+	exit();	
+}
+//ok
+function _GroupDelete($uno,$gno){
+	$query = "DELETE TB_GROUP WHERE UNO = '$uno' AND GNO = '$gno' ";
+	$stid = _SQLExecu($GLOBALS['db'],$query);
+	if($_SESSION['GNO']==$gno)
+	{
+		unset($_SESSION['GNO']);
+	}
+	header("location:index.php?SETVIEW=group");
+	exit();	
+}
+//ok
+function _ListSelect($uno,$gno){
+
+	$query = "SELECT * FROM TB_LIST WHERE UNO = '$uno' AND GNO = '$gno'";
+	$stid = _SQLOpen($GLOBALS['db'],$query);
+	return $stid;
+}
+//ok
+function _ListCreate($uno,$gno,$ltitle){
+	//echo "到這囉";
+
+	$datetime = _Gettime();
+	$query = "INSERT INTO TB_LIST(UNO,GNO,TITLE,CREATEDAY) VALUES ('$uno','$gno','$ltitle','$datetime')";
+	$stid = _SQLExecu($GLOBALS['db'],$query);
+	header("location:index.php?SETVIEW=list");
+	exit();	
+}
+//ok
+function _ListEditTitle($uno,$gno,$lno,$ltitle){
+	//echo "到這囉";
+	$query = "UPDATE TB_LIST SET TITLE = '$ltitle' WHERE UNO = '$uno' AND GNO = '$gno' AND LNO = '$lno' ";
+	$stid = _SQLExecu($GLOBALS['db'],$query);
+	header("location:index.php?SETVIEW=list");
+	exit();	
+}
+//ok
+function _ListDelete($uno,$gno,$lno){
+	$query = "DELETE TB_LIST WHERE UNO = '$uno' AND GNO = '$gno' AND LNO = '$lno'";
+	$stid = _SQLExecu($GLOBALS['db'],$query);
+	if($_SESSION['LNO']==$lno)
+	{
+		unset($_SESSION['LNO']);
+	}
+	header("location:index.php?SETVIEW=list");
+	exit();	
+}
+
+//ok
+function _ItemSelect($uno,$gno,$lno){
+	$query = "SELECT * FROM TB_ITEM WHERE UNO = '$uno' AND GNO = '$gno' AND LNO = '$lno'";
+	// echo $query;
+	// exit():
+	$stid = _SQLOpen($GLOBALS['db'],$query);
+	return $stid;
+}
+
+//ok
+function _ItemCreate($uno,$gno,$lno,$content,$author){
+	$datetime = _Gettime();
+	$query = "INSERT INTO TB_ITEM(UNO,GNO,LNO,CONTENT,CREATEDAY,AUTHOR) VALUES ('$uno','$gno','$lno','$content','$datetime'
+																			    ,'$author')";
+	$stid = _SQLExecu($GLOBALS['db'],$query);
+	header("location:index.php?SETVIEW=item");
+	exit();
+}
+//ok
+function _ItemEditContent($uno,$gno,$lno,$ino,$edititem){
+	$query = "UPDATE TB_ITEM SET CONTENT = '$edititem' WHERE UNO = '$uno' AND GNO = '$gno' AND LNO = '$lno' AND INO = '$ino' ";
+	// echo $query;
+	$stid = _SQLExecu($GLOBALS['db'],$query);
+	header("location:index.php?SETVIEW=item");
+	exit();
+}
+//ok
+function _ItemDelete($uno,$gno,$lno,$ino){
+	$query = "DELETE TB_ITEM WHERE UNO = '$uno' AND GNO = '$gno' AND LNO = '$lno' AND INO= '$ino' ";
+	$stid = _SQLExecu($GLOBALS['db'],$query);
+	header("location:index.php?SETVIEW=item");
+	exit();
+}
+
+//ok
+function _ListInsertShare($uno,$gno,$lno,$sno){
+	$query = "INSERT INTO TB_SHARE(UNO,GNO,LNO,SNO) VALUES ('$uno','$gno','$lno','$sno')";
+	$stid = _SQLExecu($GLOBALS['db'],$query);
+	header("location:index.php?SETVIEW=list");
+	exit();	
+}
+
+//ok
+function _BEShareselect($sno){
+		 $query = "SELECT * FROM TB_SHARE JOIN TB_LIST ON(TB_SHARE.GNO=TB_LIST.GNO) WHERE SNO ='$sno'" ;
+		 $stid = _SQLOpen($GLOBALS['db'],$query);
+		 return $stid;
+}
+//ok
+function _BEShareCancel($uno,$gno,$lno,$sno){
+		$query = "DELETE TB_SHARE WHERE UNO='$uno'AND GNO='$gno'AND LNO='$lno'AND SNO ='$sno'" ;
+		$stid = _SQLExecu($GLOBALS['db'],$query);
+		header("location:index.php?SETVIEW=beslist");
+		exit();	
+}
+
+function _Shareselect($uno){
+		 $query = "SELECT * FROM TB_SHARE TBS JOIN TB_LIST TBL ON(TBS.GNO=TBL.GNO) WHERE TBS.UNO ='$uno'" ;
+		 $stid = _SQLOpen($GLOBALS['db'],$query);
+		 return $stid;
+}
+function _ShareCancel($uno,$gno,$lno,$sno){
+		//echo "到這囉!!";
+		$query = "DELETE TB_SHARE WHERE UNO='$uno'AND GNO='$gno'AND LNO='$lno'AND SNO ='$sno'" ;
+		echo $query;
+    	$stid = _SQLExecu($GLOBALS['db'],$query);
+    	header("location:index.php?SETVIEW=slist");
+		exit();	
+}
+
+//抓取時間
+function  _Gettime(){
+	date_default_timezone_set('Asia/Taipei');
+	$time = date("Y/m/d-h:i:s");
+	return $time;
+}
+
+function _check($sno,$gno,$lno,$ino,$uno)
+{
+	$query = "UPDATE TB_ITEM SET oncheck = '$uno' WHERE UNO = '$sno' AND GNO = '$gno' AND LNO = '$lno' AND INO = '$ino' ";
+	// echo $query;
+	// exit();
+	$stid = _SQLExecu($GLOBALS['db'],$query);
+	header("location:index.php?SETVIEW=item");
+	exit();
+
+}
+function _Uncheck($sno,$gno,$lno,$ino)
+{
+	$query = "UPDATE TB_ITEM SET oncheck = '' WHERE UNO = '$sno' AND GNO = '$gno' AND LNO = '$lno' AND INO = '$ino' ";
+	// echo $query;
+	// exit();
+	$stid = _SQLExecu($GLOBALS['db'],$query);
+	header("location:index.php?SETVIEW=item");
+	exit();
+
+}
+
+/*控制G-L-I的新增、修改、刪除*/
+if ($set=="G_CREATE") {
+	 _GroupCreate($_GET['UNO'],$_GET['TITLE']);
+}
+
+elseif ($set=="G_EDIT") {
+	_GroupEdit($_GET['UNO'],$_GET['GNO'],$_GET['EDIT_TITLE']);
+}
+
+elseif ($set=="G_DEL") {
+	_GroupDelete($_GET['UNO'],$_GET['GNO']);
+}
+
+elseif ($set=="L_CREATE") {
+	_ListCreate($_GET['UNO'],$_GET['GNO'],$_GET['TITLE']);
+}
+
+elseif ($set=="L_EDIT") {
+	_ListEditTitle($_GET['UNO'],$_GET['GNO'],$_GET['LNO'],$_GET['EDIT_TITLE']);
+}
+
+elseif ($set=="L_SHARE") {
+	_ListInsertShare($_GET['UNO'],$_GET['GNO'],$_GET['LNO'],$_GET['SNO']);
+}
+
+elseif ($set=="L_DEL") {
+	_ListDelete($_GET['UNO'],$_GET['GNO'],$_GET['LNO']);
+}
+
+elseif ($set=="I_CREATE") {
+	_ItemCreate($_GET['UNO'],$_GET['GNO'],$_GET['LNO'],$_GET['CONTENT'],$_GET['GNAME']);
+}
+
+elseif ($set=="I_EDIT") {
+	_ItemEditContent($_GET['UNO'],$_GET['GNO'],$_GET['LNO'],$_GET['INO'],$_GET['EDIT_ITEM']);
+}
+
+elseif ($set=="I_DEL") {
 	_ItemDelete($_GET['UNO'],$_GET['GNO'],$_GET['LNO'],$_GET['INO']);
 }
 
+elseif ($set=="BES_Cancel") {
+	_BEShareCancel($_GET['UNO'],$_GET['GNO'],$_GET['LNO'],$_GET['SNO']);
+}
+elseif ($set=="S_Cancel") {
+	_ShareCancel($_GET['UNO'],$_GET['GNO'],$_GET['LNO'],$_GET['SNO']);
+}
+elseif ($set=="I_CHK") {
+	_check($_GET['SNO'],$_GET['GNO'],$_GET['LNO'],$_GET['INO'],$_GET['UNO']);
+}	
+elseif ($set=="I_UNCHK") {
+	_Uncheck($_GET['SNO'],$_GET['GNO'],$_GET['LNO'],$_GET['INO']);
+}
 
 
 
-//item 的select
 
 
-//EJ的Fun End------------------------------------------------------------------------------------------
 
 
 // function _ItemCreate($uno){}

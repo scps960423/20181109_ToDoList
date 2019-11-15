@@ -5,7 +5,6 @@
   }else{
     session_destroy();
   }
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -58,6 +57,7 @@
                 echo '</div>';
                 echo '<form name="form" method="post" action="">';
                 echo '<input type="submit" value="確認註冊" name="submit_Signup1">';//2
+                echo '  ';
                 echo '<input type="submit" value="取消" name="submit_Signup2">';
                 echo '</form>';
                 echo '</form>';
@@ -67,6 +67,7 @@
                 echo '<input type="submit" value="登入" name="submit_Login">';//1
                 echo '</form>';
                 echo '<form name="form" method="post" action="">';
+                echo "</br>";
                 echo '<input type="submit" value="開始註冊" name="submit_Signup">';
                 echo '</form>';
               }
@@ -76,7 +77,6 @@
         // var_dump($_POST) ;
           if(isset($_POST['submit_Signup1']))//2
           {
-
             _AccountCreate($_POST['account'],$_POST['password'],$_POST['uname'],$_POST['email']);            
           }
           if(isset($_POST['submit_Signup2'])){

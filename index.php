@@ -1,8 +1,10 @@
 
 <?php
+  /*防止跳出Notice*/
+  error_reporting(0);
+
   include("Main.php");
 
-  /*取session的NUO &UNAME數值 */
   if (isset($_POST['submit_g_create'])) {
     _GroupCreate($_SESSION['UNO'],$_POST['gtitle']);
   }
@@ -38,10 +40,43 @@
   $stid = _SQLOpen($GLOBALS['db'],$query);
   $resultJSON_BeShare = json_encode($stid->fetchAll(PDO::FETCH_ASSOC));//user被分享的list的Json
 
-  /*連線資料*/
-  $db = "oci:dbname=(description=(address=(protocol=tcp)(host=140.117.69.58)(port=1521))(connect_data=(sid=ORCL)));charset=utf8";
-  $username = "Group17";
-  $password = "group171717";
+
+//isset
+
+$_SESSION['GNAME']="請先選擇類別";
+$_SESSION["LNAME"]="請先選擇清單";
+
+
+ 
+ //判斷值是否被set - GNO
+ if (isset($_GET["GNO"]))
+  {
+    $_SESSION["GNO"]=$_GET["GNO"];
+  }
+  $gno=$_SESSION['GNO'];
+
+//判斷值是否被set - LNO
+   if (isset($_GET["LNO"]))
+  {
+    $_SESSION["LNO"]=$_GET["LNO"];
+  }
+  $lno=$_SESSION['LNO'];
+
+//判斷值是否被set - GNAME
+  if (isset($_GET["GNAME"]))
+  {
+    $_SESSION["GNAME"]=$_GET["GNAME"];
+  }
+  $gname=$_SESSION['GNAME'];
+////判斷值是否被set - LNAME
+    if (isset($_GET["LNAME"]))
+  {
+    $_SESSION["LNAME"]=$_GET["LNAME"];
+  }
+  $lname=$_SESSION['LNAME'];
+
+  //利用Main_Header回傳值當變數傳到Script中決定要開啟那個畫面。
+  $Setview = $_GET["SETVIEW"];
 
 ?>
 
@@ -56,228 +91,367 @@
   <link rel="stylesheet" href="/css/rect.css">
   <script src="http://code.jquery.com/jquery-3.4.1.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-  <title>HiToDo</title>
-  <script>
-    var $groupTool = $('.baseContent .content .tool'),
-      $addBut = $groupTool.find('.addBut a'),
-      $input = $groupTool.find('.input');
 
-    $addBut.click(function(e) {
-      e.preventDefault();
-      console.log($(this)[0]);
-      $input.toggleClass('is-active');
-    });
-    var json_baseDate = [{
-        "name": "類別",
-        "page": true
-      },
-      {
-        "name": "清單",
-        "page": false
-      },
-      {
-        "name": "共享的清單",
-        "page": false
-      }
-    ];
+  <title>你好清單</title>
+  <script>
+  	//初始狀態
+  	var json_baseDate = [{"name": "類別","page": true},{"name": "清單","page": false},{"name": "項目","page": false}, 
+    	{"name": "被分享清單","page": false},{"name": "分享清單","page": false} ];
+  	
+  	//--------------待整合成function--------------------------------------------------------------------------------------
+  	var Setview="<?php echo $Setview; ?>";
+  	if(Setview=='group'){
+  		var json_baseDate = [{"name": "類別","page": true},{"name": "清單","page": false},{"name": "項目","page": false}, 
+    	{"name": "被分享清單","page": false},{"name": "分享清單","page": false} ];
+  	}
+  	else if(Setview=='list'){//清單頁面動作後回傳狀態
+  		var json_baseDate = [{"name": "類別","page": false},{"name": "清單","page": true},{"name": "項目","page": false}, 
+    	{"name": "被分享清單","page": false},{"name": "分享清單","page": false} ];
+  	}
+  	else if(Setview=='item'){//項目頁面動作後回傳狀態
+  		var json_baseDate = [{"name": "類別","page": false},{"name": "清單","page": false},{"name": "項目","page": true}, 
+    	{"name": "被分享清單","page": false},{"name": "分享清單","page": false} ];
+  	}
+  	else if(Setview=='beslist'){//被分享清單頁面動作後回傳狀態
+  		var json_baseDate = [{"name": "類別","page": false},{"name": "清單","page": false},{"name": "項目","page": false}, 
+    	{"name": "被分享清單","page": true},{"name": "分享清單","page": false} ];
+  	}
+  	else if(Setview=='slist'){//分享清單頁面動作後回傳狀態
+  		var json_baseDate = [{"name": "類別","page": false},{"name": "清單","page": false},{"name": "項目","page": false}, 
+    	{"name": "被分享清單","page": false},{"name": "分享清單","page": true} ];
+  	}
+  	
+    
+
   </script>
+
 </head>
 
 <body>
   <div class="layout">
     <div class="baseHeader">
       <div class="logo">
-        Hi To Do
+        to do List
       </div>
       <div class="moduleUser">
-
-        
-        <div class="test">Hi!<span><?php echo $_SESSION['UNAME']; ?> </span></div>
+        <div class="test">Hi!<span><?php echo $uname ?></span></div>
         <div class="tool"><a href="signIn.php">Sign out</a></div>
-
       </div>
     </div>
     <div class="baseFrame" id="toDoList">
       <div class="baseMenu">
-        <div class="list">
+        <div class="list" >
           <ul v-for="(item,i) in list">
             <li><a href="#" v-on:click.prevent="tab(i)">{{ item.name }}</a></li>
           </ul>
         </div>
       </div>
       <div class="baseContent">
+      	<!--類別-->
         <div class="page" v-if="list[0].page==true">
           <div class="title">【<?php echo $uname ?>】的{{list[0].name}}</div>
           <div class="content">
-
-        <!--新增開始-->
-            <form action="DB_Insert.php" method="get">
-            <!--先給Uno固定給Session傳入的值，傳入DB_Insert做為值來新增欄位-->
-            <font>新的類別:</font>
-
-            <input type="Hidden" name="Insert_UNO" value="<?php echo $uno ;?>">
-            <input type="text"   name="Insert_TITLE">
-            <input type="submit" value="新增" >
-            </from>
-      <!--新增結束-->
-
-           
-<!--新增結束-->
-
+            <div class="tool">
+            	<!--G_CREATE-->
+            	<form action="Main.php" method="get">
+            		<input type="hidden" name="UNO" value="<?php echo($uno)?>">
+            		<input type="hidden" name="set" value="G_CREATE">
+            		<input type="text" name="TITLE" placeholder="新增類別名稱">
+            	 	<input type="submit" value="新增">
+            	</form>
+            </div>
             <div class="list">
               <ul>
-                <?php
-                try {
-                  $options = array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8');
-                  $dbh = new PDO($db, $username, $password);
+				<?php
+    				try {
+          			 	 $conn = _dbconnect();
+          			 	 $stid=_GroupSelect($uno);
+          			foreach ($stid as $row ) {
+				?>
+                <li>
+                  <!--G_Display-->
+                  <div class="name"><a href="index.php ?GNO=<?php echo $row["GNO"]?>&
+                                                        GNAME=<?php echo $row["TITLE"]?>&
+                                                        SETVIEW=list">
+                  	  
+                  	<?php echo $row["TITLE"];?></a>
+                 </div>
 
-                  $query = "SELECT * FROM TB_GROUP WHERE UNO ='$uno'";
-                  $result = $dbh->prepare("$query");
-                  $result->execute();
-                  while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
-                    ?>
+                  
+                  <div class="tool">
+                  <!--G_EDIT-->
+                  <form action="Main.php" method="get">
+            		<input type="hidden" name="UNO" value="<?php echo($uno)?>">
+            		<input type="hidden" name="GNO" value="<?php echo $row["GNO"]?>">
+            		<input type="hidden" name="set" value="G_EDIT">
+            		<input type="text" name="EDIT_TITLE" placeholder="修改內容"> 
+            	 	<input type="submit" value="修改">&nbsp;&nbsp;&nbsp;
+            	  </form>
 
-                    <li>
-                       <div class="name"><a href="List/List.php?GNO=<?php echo $row["GNO"];?> &
-                                                                UNO=<?php echo $_SESSION['UNO'];?>&
-                                                                GNAME= <?php echo $row["TITLE"]; ?> ">
-                       <!--顯示-->
-                       <?php echo $row["TITLE"]; ?>                                           
-                       </a></div>
 
-                     <div class="tool">
-                        <!--類別更新開始-->
-                        <font>修改內容：</font>
-                      <form action="DB_UPDATE.php" method="get">
-                      <input type="hidden" name="GNO" value="<?php  echo $row["GNO"];?>">
-                      <input type="hidden" name="UNO" value="<?php  echo $uno;?>">
-                      <input type="text"   name="NEW_TITLE">&nbsp;&nbsp;
-                      <input type="submit" value="修改">
-                      </form>
-                        <!--類別更新結束-->
-                        &nbsp;&nbsp;
-                      <!--LIST刪除開始-->
-                      <a href="DB_Delete.php?GNO=<?php echo $row["GNO"];?>&
-                                                 UNO=<?php echo $_SESSION['UNO'];?>"
-                        class="delete">刪除</a>
-                        <!--LIST刪除結束-->
-                     </div>
-
-                    </li>
-                <?php /*wHILE 下半段*/
-                  }
-                } catch (PDOException $e) {
-                  return ("DB connect Error!: $e->getMessage()");
-                  die();
-                }
-                ?>
+                  <!--G_DELETE-->
+                    <a href="Main.php ?UNO=<?php  echo $uno?>&
+                                       GNO=<?php  echo $row["GNO"]?>&
+                                       set=G_DEL"class="delete">刪除</a>
+                  </div>
+                </li>
+				<?php 
+     				 }
+      				  } 
+      				catch (PDOException $e) {
+            		   return ("DB connect Error!: $e->getMessage()");
+            		   die();
+      				}
+				?>
               </ul>
             </div>
           </div>
         </div>
-
         <!--清單-->
-        <div class="page" v-if="list[1].page==true"></a>
-          <div class="title">【<?php echo $uname ?>】的{{list[1].name}}</div>
+        <div class="page" v-if="list[1].page==true">
+          <div class="title">類別：【<?php echo $gname ?>】</div>
           <div class="content">
-            <div class="tool"><a href="#">add+</a></div>
+          	<div class="name" style="text-align:center;"><font size ="4"face="DFKai-sb">清單</font></div>
+            <div class="tool">
+            	<!--L_CREATE-->
+            	<form action="Main.php" method="get">
+            		<input type="hidden" name="UNO" value="<?php echo($uno)?>">
+            		<input type="hidden" name="GNO" value="<?php echo $gno?>">
+            		<input type="hidden" name="set" value="L_CREATE">
+            		<input type="text" name="TITLE" placeholder="新增清單名稱">
+            	 	<input type="submit" value="新增">
+            	</form>
+            </div>
             <div class="list">
               <ul>
-                  <?php
-                   /*顯示 While 上半段*/
-                   try {
-                        $options = array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8');
-                        $dbh = new PDO($db, $username, $password);
-                        $query2 = "SELECT LNO AS LLNO , TBL.GNO AS LGNO ,TBL.UNO AS UNO , TBG.TITLE AS G_TITLE , TBL.TITLE AS L_TITLE   
-                        FROM TB_LIST TBL join TB_GROUP TBG
-                        ON(TBL.UNO = TBG.UNO)  WHERE  TBG.UNO='$uno' ";
-                        //顯示SQL
-                        echo "$query2";
-                        $result = $dbh->query($query2);
+              <?php
+    				try {
+          			 	 $conn=_dbconnect();
+          			 	 $stid=_ListSelect($uno,$gno);
+          			foreach ($stid as $row) {
+				?>
 
-                  foreach ($result as $row ) {
-                    ?>
                 <li>
-                    <div class="name"><a href="">
-                      【
-                      <?php echo $row["G_TITLE"]; ?>】-
-                      <?php echo $row["L_TITLE"]; ?></a></div>
-                    <div class="tool">
-                     <!--尚未完成--> 
-                    <a href="http://" class="edit">編輯</a>
-                     <a href="list/List_Delete.php?GNO=<?php  echo $row["LGNO"];?>&
-                                               UNO=<?php  echo $uno ?> &
-                                               LNO=<?php  echo $row["LLNO"];?>
-                      "class="delete">刪除</a>
-                    </div>
+                　
+                  <!--L_DISPLAY-->
+                  <div class="name">
+                  	<a href="index.php ?UNO=<?php  echo $uno?>&
+                                        GNO=<?php  echo $gno?>&
+                                        LNO=<?php  echo $row["LNO"]?>&
+                                        GNAME=<?php echo $gname?>&
+                                        LNAME=<?php echo $row["TITLE"]?>&
+                                        SETVIEW=item"
+                                        >
+                                       	<?php echo $row["TITLE"]?>
+
+                  </a></div>
+                  <div class="tool">
+
+
+                  <!--LIST_SHARE-->
+                  <form action="Main.php" method="get">
+                    <input type="hidden" name="UNO" value="<?php  echo($uno)?>">
+                    <input type="hidden" name="GNO" value="<?php  echo($gno)?>">
+                    <input type="hidden" name="LNO" value="<?php  echo $row["LNO"];?>">
+                    <input type="hidden" name="set" value="L_SHARE">
+                    <input type="text"   name="SNO" placeholder="分享對象ID" >&nbsp;
+                    <a><input type="submit" value="分享">&nbsp;&nbsp; </a>
+                  </form>
+
+
+                  <!--L_EDIT-->
+                  <form action="Main.php" method="get">
+            		<input type="hidden" name="UNO" value="<?php echo($uno)?>">
+            		<input type="hidden" name="GNO" value="<?php echo($gno)?>">
+            		<input type="hidden" name="LNO" value="<?php echo $row["LNO"]?>">
+            		<input type="hidden" name="set" value="L_EDIT">
+            		<input type="text" name="EDIT_TITLE" placeholder="修改內容"> 
+            	 	<input type="submit" value="修改">&nbsp;&nbsp;&nbsp;
+            	  </form>
+                    <!--a href="http://" class="edit"></a 修改的標籤-->
+
+                    <!--L_DEL-->
+                    <a href="Main.php ?UNO=<?php  echo $uno?>&
+                                       GNO=<?php  echo $gno?>&
+                                       LNO=<?php  echo $row["LNO"]?>&
+                                       set=L_DEL"class="delete">刪除</a>
+                  </div>
                 </li>
-                <!--顯示 While下半段-->
-                <?php
-                      }
-                        } catch (PDOException $e) {
-                          return ("DB connect Error!: $e->getMessage()");
-                          die();
-                        }
+                <?php 
+     				 }
+      				  } 
+      				catch (PDOException $e) {
+            		   return ("DB connect Error!: $e->getMessage()");
+            		   die();
+      				}
+				?>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <!--項目-->
+        <div class="page" v-if="list[2].page==true">
+          <div class="title">【<?php echo $lname?>】清單</div>
+          <div class="content">
+          	<div class="name" style="text-align:center;"><font size ="4"face="DFKai-sb">項目</font></div>
+            <div class="tool">
+            	<!--I_CREATE-->
+            	<form action="Main.php" method="get">
+            		<input type="hidden" name="UNO" value="<?php echo($uno)?>">
+            		<input type="hidden" name="GNO" value="<?php echo $gno?>">
+            		<input type="hidden" name="LNO" value="<?php echo $lno?>">
+            		<input type="hidden" name="GNAME" value="<?php echo $uname?>">
+            		<input type="hidden" name="set" value="I_CREATE">
+            		<input type="text"   name="CONTENT" placeholder="新增項目內容">
+            	 	<input type="submit" value="新增">
+            	</form>
+            </div>
+            <div class="list">
+              <ul>
+              	<?php
+    				try {
+          			 	 $conn = _dbconnect();
+          			 	 $stid=_ItemSelect($uno,$gno,$lno);
+          				 foreach ($stid as $row) {
+				?>
+                <li> 
+                  <!--I_DISPLAY-->
+                  <div class="name"><a><?php echo $row["CONTENT"]?></a></div>
+                  <div class="tool">
+                  
+                  <!--I_EDIT-->
+                  <form action="Main.php" method="get">
+            		<input type="hidden" name="UNO" value="<?php echo $uno?>">
+            		<input type="hidden" name="GNO" value="<?php echo($gno)?>">
+            		<input type="hidden" name="LNO" value="<?php echo($lno)?>">
+            		<input type="hidden" name="INO" value="<?php echo $row["INO"]?>">
+            		<input type="hidden" name="set" value="I_EDIT">
+            		
+            		<input type="text" name="EDIT_ITEM" placeholder="修改項目內容"> 
+            	 	<input type="submit" value="修改">&nbsp;
+                <?php 
+                  if(strlen($row["ONCHECK"])!="")
+                  {
+                    echo '<a href="Main.php ?SNO='.$uno.'&';
+                    echo  'GNO='.$gno.'&';
+                    echo  'LNO='.$lno.'&';
+                    echo  'INO='.$row["INO"].'&';
+                    echo  'UNO='.$_SESSION["UNO"].'&';
+                    echo  'set=I_UNCHK">已確認</a>&nbsp;';
+                  }else{
+                    echo '<a href="Main.php ?SNO='.$uno.'&';
+                    echo  'GNO='.$gno.'&';
+                    echo  'LNO='.$lno.'&';
+                    echo  'INO='.$row["INO"].'&';
+                    echo  'UNO='.$_SESSION["UNO"].'&';                    
+                    echo  'set=I_CHK">未確認</a>&nbsp;';
+                  }
+
                 ?>
+            	 	<!-- <input type="checkbox" id="check" onclick="check()" >&nbsp;&nbsp;&nbsp; -->
+            	  </form>
+                    <!--a href="http://" class="edit">編輯</a-->
+
+                    <!--I_DEL-->
+                    <a href="Main.php ?UNO=<?php  echo $uno?>&
+                                        GNO=<?php  echo $gno?>&
+                                        LNO=<?php  echo $lno?>&
+                                        INO=<?php  echo $row["INO"]?>&
+                                        set=I_DEL"class="delete">刪除</a>
+                  </div>
+                </li>
+            	 <?php 
+     				 }
+      				   } 
+      				catch (PDOException $e) {
+            		   return ("DB connect Error!: $e->getMessage()");
+            		   die();
+      				}
+				?>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <!--被分享之清單-->
+        <div class="page" v-if="list[3].page==true">
+          <div class="title">【<?php echo $uname ?>】的{{list[3].name}}</div>
+          <div class="content">
+            <div class="list">
+              <ul>
+                <?php
+    				try {
+          			 	 $conn = _dbconnect();
+          			 	 $stid=_BEShareselect($uno);
+          				 foreach ($stid as $row) {
+				?>
+                <li>
+                  <div class="name"><a href="http://"><?php echo $row["TITLE"];?> ｜
+                  <FONT>擁有者ID：【<?php echo $row["UNO"];?></FONT>】
+                  </a></div>
+                  <div class="tool">
+                     <a href="Main.php?SNO=<?php echo($uno)?>&
+                     				   GNO=<?php echo $row["GNO"];?>&
+                     				   LNO=<?php echo $row["LNO"];?>&
+                     				   UNO=<?php echo $row["UNO"];?>&
+                                       set=BES_Cancel"
+                        class="delete">刪除</a>
+                  </div>
+                </li>
+                <?php 
+     				 }
+      				   } 
+      				catch (PDOException $e) {
+            		   return ("DB connect Error!: $e->getMessage()");
+            		   die();
+      				}
+				?>
+              </ul>
+            </div>
+          </div>
+        </div>
+         <!--分享之清單-->
+        <div class="page" v-if="list[4].page==true">
+          <div class="title">【<?php echo $uname ?>】的{{list[4].name}}</div>
+          <div class="content">
+            <div class="list">
+              <ul>
+         		  <?php
+    				try {
+          			 	 $conn = _dbconnect();
+          			 	 $stid=_Shareselect($uno);
+          				 foreach ($stid as $row) {
+				?>
+                <li>
+                  <div class="name"><a href="http://">
+                  	<?php echo $row["TITLE"];?>清單 | 分享者ID:【<?php echo $row["SNO"];?>】	
+                  </a></div>
+                  <div class="tool">
+                    <a href="Main.php? UNO=<?php echo($uno)?>&
+                     				   GNO=<?php echo $row["GNO"];?>&
+                     				   LNO=<?php echo $row["LNO"];?>&
+                     				   SNO=<?php echo $row["SNO"];?>&
+                                       set=S_Cancel"
+                        class="delete">刪除</a>
+                  </div>
+                </li>
+               	 <?php 
+     				 }
+      				   } 
+      				catch (PDOException $e) {
+            		   return ("DB connect Error!: $e->getMessage()");
+            		   die();
+      				}
+				?>
               </ul>
             </div>
           </div>
         </div>
 
-
-        <!--被分享清單-->
-        <div class="page" v-if="list[2].page==true">
-          <div class="title">【<?php echo $uname ?>】的{{list[2].name}}</div>
-           <div class="content">
-            <!--Q在這個清單上做一個跳轉到/list/list.php上-->
-            <div class="list">
-              <ul>
-                <!--被分享清單select及顯示-->
-              <?php
-                 /*顯示 While 上半段*/
-                try {
-                  $options = array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8');
-                  $dbh = new PDO($db, $username, $password);
-
-                  $query3 = "SELECT * FROM TB_SHARE JOIN TB_LIST ON(TB_SHARE.GNO=TB_LIST.GNO) WHERE SNO ='$uno'"  ;
-                  //顯示SQL
-                  //echo "$query2";
-                  $result = $dbh->query($query3);
-
-                  foreach ($result as $row ) {
-                    ?>
-                <li>
-                   <div class="name"><a href="index.php"><?php echo $row["TITLE"]; ?>
-                    ＜擁有者：<?php echo $row["UNO"]; ?>＞</a></div>
-                    <!--
-                    <div class="tool">
-                       <a href="Db_Share_Del.php?SNO=<?php echo $uno ;?>&
-                                     GNO=<?php echo $row["GNO"]; ?> &
-                                     LNO=<?php echo $row["LNO"]; ?> &
-                                     UNO=<?php echo $row["UNO"]; ?>
-
-                        " Class = "delete">
-                       刪除</a>
-                    </div>-->
-                </li>
-                <!--顯示 While下半段-->
-                <?php
-                      }
-                        } catch (PDOException $e) {
-                          return ("DB connect Error!: $e->getMessage()");
-                          die();
-                        }
-                ?>
-              </ul>
-            </div>
-          </div> 
-          
       </div>
     </div>
-
   </div>
-  <script src="./js/main.js"></script>
-</body>
+  <script src="js/main.js"></script>
 
+</body>
 
 </html>
